@@ -2,7 +2,7 @@
 
 ## TODO
 
--   [ ] Refresh with router on new batch creation
+-   [x] Refresh with revalidate path
 -   [ ] Add form validation (zod?)
 -   [ ] Error management
 -   [ ] Delete button

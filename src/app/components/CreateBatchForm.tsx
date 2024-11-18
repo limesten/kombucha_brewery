@@ -3,15 +3,13 @@
 import { createBatch } from "../actions";
 
 export function CreateBatchForm() {
-    const handleNewBatch = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
+    const handleNewBatch = async (formData: FormData) => {
         await createBatch(formData);
     };
 
     return (
         <div>
-            <form onSubmit={handleNewBatch}>
+            <form action={handleNewBatch}>
                 <label htmlFor="batchNumber">Batch number</label>
                 <input type="text" name="batchNumber" id="batchNumber" />
                 <br />
