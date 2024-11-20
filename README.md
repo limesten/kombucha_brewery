@@ -6,4 +6,4 @@
 -   [ ] Add form validation (zod?)
 -   [ ] Error management
 -   [ ] Delete button
--   [ ] Create nice ui
+-   [ ] Scaffold a decent UI
