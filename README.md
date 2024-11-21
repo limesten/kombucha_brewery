@@ -6,4 +6,6 @@
 -   [ ] Add form validation (zod?)
 -   [ ] Error management
 -   [ ] Delete button
--   [ ] Scaffold a decent UI
+-   [x] Scaffold a simple UI
+-   [x] Add shadui
+-   [x] Add toasts

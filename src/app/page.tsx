@@ -18,8 +18,8 @@ export default async function Home() {
             </div>
 
             {batches.map((batch) => (
-                <>
-                    <div key={batch.id} className="text-xl flex justify-evenly my-4">
+                <div key={batch.id}>
+                    <div className="text-xl flex justify-evenly my-4">
                         <p className="mx-4">Batch: {batch.batch_number}</p>
                         <p className="mx-4">Start: {batch.start_date}</p>
                         <p className="mx-4">
@@ -28,7 +28,7 @@ export default async function Home() {
                         <p className="mx-4">Status: Fermenting</p>
                     </div>
                     <hr className="my-4 border-t border-gray-400" />
-                </>
+                </div>
             ))}
         </div>
     );

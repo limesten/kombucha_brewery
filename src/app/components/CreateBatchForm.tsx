@@ -2,13 +2,17 @@
 
 import { useState } from "react";
 import { createBatch } from "../actions";
+import { toast } from "sonner";
 
 export function CreateBatchForm() {
     const [formVisible, setFormVisible] = useState(false);
 
     const handleNewBatch = async (formData: FormData) => {
         if (formVisible) {
-            await createBatch(formData);
+            const result = await createBatch(formData);
+            if (result?.error) {
+                toast(result.error);
+            }
             setFormVisible(false);
         } else {
             setFormVisible(true);
