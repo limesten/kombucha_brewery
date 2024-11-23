@@ -7,10 +7,11 @@
 -   [x] Add shadui
 -   [x] Add toasts
 -   [x] Add dialog with form and date picker to create new batch
+-   [x] Add pagination
+-   [x] Add past production page
+-   [x] Add navbar
 -   [ ] Calc days left
--   [ ] Batch archive
 -   [ ] Progress bar
 -   [ ] Authentification
 -   [ ] Email notifications
 -   [x] Dropdown for delete batch / mark as done
--   [ ] Dialog for batch creation

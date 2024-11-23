@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { TopNav } from "./components/TopNav";
 
 export const metadata: Metadata = {
     title: "Kombucha Brewery",
@@ -15,8 +16,11 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
-                {children}
-                <Toaster position="top-right" />
+                <div className="container mx-auto max-w-[800px]">
+                    <TopNav />
+                    {children}
+                    <Toaster position="top-right" />
+                </div>
             </body>
         </html>
     );

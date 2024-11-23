@@ -1,4 +1,4 @@
-import { getBatches } from "@/server/queries";
+import { getActiveBatches } from "@/server/queries";
 import { CreateBatchDialog } from "./components/CreateBatchDialog";
 import { deleteBatch, updateBatchStatus } from "./actions";
 import {
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export default async function Home() {
-    const batches = await getBatches();
+    const batches = await getActiveBatches();
 
     const calcFinishDate = (startDate: string) => {
         const expectedBrewingDays = 7;
@@ -21,11 +21,7 @@ export default async function Home() {
     };
 
     return (
-        <div className="container mx-auto max-w-[800px]">
-            <div className="w-full flex justify-center">
-                <CreateBatchDialog />
-            </div>
-
+        <>
             <div className="text-xl flex my-4">
                 <p className="mx-4 w-1/5">Batch</p>
                 <p className="mx-4 w-1/5">Start</p>
@@ -77,6 +73,9 @@ export default async function Home() {
                     <hr className="my-4 border-t border-gray-400" />
                 </div>
             ))}
-        </div>
+            <div className="w-full flex justify-center py-4">
+                <CreateBatchDialog />
+            </div>
+        </>
     );
 }
