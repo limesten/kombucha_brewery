@@ -7,6 +7,7 @@ export const batches = sqliteTable("batches", {
     batch_number: text().notNull(),
     start_date: text().notNull(),
     created_at: text().default(sql`CURRENT_TIMESTAMP`),
+    status: text().notNull(),
 });
 
 export const batchSchema = z.object({
