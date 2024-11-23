@@ -20,5 +20,5 @@ export const batchSchema = z.object({
             message: "Batch number must be at most 20 characters",
         })
         .trim(),
-    startDate: z.string().date(),
+    startDate: z.date(),
 });

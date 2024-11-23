@@ -1,5 +1,5 @@
 import { getBatches } from "@/server/queries";
-import { CreateBatchForm } from "./components/CreateBatchForm";
+import { CreateBatchDialog } from "./components/CreateBatchDialog";
 import { deleteBatch, updateBatchStatus } from "./actions";
 import {
     DropdownMenu,
@@ -23,7 +23,7 @@ export default async function Home() {
     return (
         <div className="container mx-auto max-w-[800px]">
             <div className="w-full flex justify-center">
-                <CreateBatchForm />
+                <CreateBatchDialog />
             </div>
 
             <div className="text-xl flex my-4">

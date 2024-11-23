@@ -6,11 +6,12 @@ import { revalidatePath } from "next/cache";
 import { getErrorMessage } from "@/lib/utils";
 import { batchSchema } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
+import { z } from "zod";
 
-export async function createBatch(formData: FormData) {
+export async function createBatch(values: z.infer<typeof batchSchema>) {
     const validatedFields = batchSchema.safeParse({
-        batchNumber: formData.get("batchNumber"),
-        startDate: formData.get("startDate"),
+        batchNumber: values.batchNumber,
+        startDate: values.startDate,
     });
 
     if (!validatedFields.success) {
@@ -28,7 +29,7 @@ export async function createBatch(formData: FormData) {
     try {
         await db.insert(batches).values({
             batch_number: validatedFields.data.batchNumber,
-            start_date: validatedFields.data.startDate,
+            start_date: validatedFields.data.startDate.toISOString().split("T")[0],
             status: "Fermenting",
         });
     } catch (err) {
