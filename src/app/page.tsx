@@ -1,15 +1,6 @@
 import { getActiveBatches } from "@/server/queries";
-import { CreateBatchDialog } from "./components/CreateBatchDialog";
-import { deleteBatch, updateBatchStatus } from "./actions";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+import { CreateBatchDialog } from "./CreateBatchDialog";
+import { BatchDropdown } from "./BatchDropdown";
 
 export default async function Home() {
     const batches = await getActiveBatches();
@@ -40,38 +31,7 @@ export default async function Home() {
                         <p className="mx-4 w-1/5">{batch.status}</p>
 
                         <div className="mx-4 w-1/5">
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline">...</Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuLabel>Batch Actions</DropdownMenuLabel>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem>
-                                        <form
-                                            action={async () => {
-                                                "use server";
-                                                await updateBatchStatus(
-                                                    batch.id,
-                                                    "Finished"
-                                                );
-                                            }}
-                                        >
-                                            <button>Mark as finished</button>
-                                        </form>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        <form
-                                            action={async () => {
-                                                "use server";
-                                                await deleteBatch(batch.id);
-                                            }}
-                                        >
-                                            <button>Delete batch</button>
-                                        </form>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                            <BatchDropdown batch={batch} />
                         </div>
                     </div>
                     <hr className="my-4 border-t border-gray-400" />

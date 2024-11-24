@@ -17,3 +17,4 @@
 -   [ ] Authentification
 -   [ ] Email notifications
 -   [x] Dropdown for delete batch / mark as done
+-   [ ] Choose batch status during creation

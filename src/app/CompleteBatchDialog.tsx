@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Batch } from "@/server/db/schema";
+import { updateBatch } from "./actions";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
 import {
     Form,
     FormControl,
@@ -26,64 +26,51 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { batchSchema } from "@/server/db/schema";
-import { createBatch } from "../actions";
 import { toast } from "sonner";
 
-export function CreateBatchDialog() {
-    const [dialogOpen, setDialogOpen] = useState(false);
+const FormSchema = z.object({
+    finishDate: z.date({
+        required_error: "A finish date is required",
+    }),
+});
 
-    const form = useForm<z.infer<typeof batchSchema>>({
-        resolver: zodResolver(batchSchema),
-        defaultValues: {
-            batchNumber: "",
-            startDate: new Date(),
-        },
+export function CompleteBatchDialog({
+    open,
+    onOpenChange,
+    batch,
+}: {
+    open: boolean;
+    onOpenChange: (isOpen: boolean) => void;
+    batch: Batch;
+}) {
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
     });
 
-    const handleNewBatch = async (values: z.infer<typeof batchSchema>) => {
-        const result = await createBatch(values);
-        if (result?.error) {
-            toast(result.error);
-        }
-        setDialogOpen(false);
+    const handleCompleteBatch = async (values: z.infer<typeof FormSchema>) => {
+        console.log(values);
+        batch.finish_date = values.finishDate;
+        batch.status = "Finished";
+        await updateBatch(batch);
+        onOpenChange(false);
     };
 
     return (
-        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-                <Button variant="outline">Create Batch</Button>
-            </DialogTrigger>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Create batch</DialogTitle>
+                    <DialogTitle>Complete batch</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleNewBatch)}>
-                        <div className="my-4">
-                            <FormField
-                                control={form.control}
-                                name="batchNumber"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>Batch number</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                        </div>
+                    <form onSubmit={form.handleSubmit(handleCompleteBatch)}>
                         <FormField
                             control={form.control}
-                            name="startDate"
+                            name="finishDate"
                             render={({ field }) => (
                                 <FormItem className="flex flex-col">
-                                    <FormLabel>Start date</FormLabel>
+                                    <FormLabel>Finish date</FormLabel>
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <FormControl>
@@ -112,10 +99,6 @@ export function CreateBatchDialog() {
                                                 mode="single"
                                                 selected={field.value}
                                                 onSelect={field.onChange}
-                                                disabled={(date) =>
-                                                    date > new Date() ||
-                                                    date < new Date("1900-01-01")
-                                                }
                                                 initialFocus
                                             />
                                         </PopoverContent>
@@ -125,7 +108,7 @@ export function CreateBatchDialog() {
                             )}
                         />
                         <DialogFooter>
-                            <Button type="submit">Create batch</Button>
+                            <Button type="submit">Complete batch</Button>
                         </DialogFooter>
                     </form>
                 </Form>

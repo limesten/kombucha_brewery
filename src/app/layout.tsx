@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { TopNav } from "./components/TopNav";
+import { TopNav } from "./TopNav";
 
 export const metadata: Metadata = {
     title: "Kombucha Brewery",

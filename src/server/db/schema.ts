@@ -2,6 +2,7 @@
 import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { z } from "zod";
+import { InferSelectModel } from "drizzle-orm";
 
 export const batches = pgTable("batches", {
     id: serial("id").primaryKey(),
@@ -24,3 +25,5 @@ export const batchSchema = z.object({
         .trim(),
     startDate: z.date(),
 });
+
+export type Batch = InferSelectModel<typeof batches>;

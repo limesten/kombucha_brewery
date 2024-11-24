@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/server/db";
-import { batches } from "@/server/db/schema";
+import { batches, Batch } from "@/server/db/schema";
 import { revalidatePath } from "next/cache";
 import { getErrorMessage } from "@/lib/utils";
 import { batchSchema } from "@/server/db/schema";
@@ -47,8 +47,8 @@ export async function deleteBatch(id: number) {
     revalidatePath("/");
 }
 
-export async function updateBatchStatus(id: number, status: string) {
-    await db.update(batches).set({ status: status }).where(eq(batches.id, id));
+export async function updateBatch(batch: Batch) {
+    await db.update(batches).set(batch).where(eq(batches.id, batch.id));
 
     revalidatePath("/");
 }
