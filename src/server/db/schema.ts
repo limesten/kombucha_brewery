@@ -1,4 +1,3 @@
-//import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { z } from "zod";
@@ -24,6 +23,7 @@ export const batchZodSchema = z.object({
         })
         .trim(),
     startDate: z.date(),
+    status: z.string(),
 });
 
 export type Batch = InferSelectModel<typeof batches>;

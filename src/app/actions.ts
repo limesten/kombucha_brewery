@@ -11,6 +11,7 @@ export async function createBatch(values: z.infer<typeof batchZodSchema>) {
     const validatedFields = batchZodSchema.safeParse({
         batchNumber: values.batchNumber,
         startDate: values.startDate,
+        status: values.status,
     });
 
     if (!validatedFields.success) {
@@ -28,7 +29,7 @@ export async function createBatch(values: z.infer<typeof batchZodSchema>) {
     const newBatch: NewBatch = {
         batch_number: validatedFields.data.batchNumber,
         start_date: validatedFields.data.startDate,
-        status: "Fermenting",
+        status: validatedFields.data.status,
     };
 
     try {
