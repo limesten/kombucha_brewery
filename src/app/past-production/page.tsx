@@ -1,4 +1,4 @@
-import { getPreviousBatches } from "@/server/queries";
+import { getPreviousBatchesQuery } from "@/server/queries";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { deleteBatch } from "@/app/actions";
 
 export default async function Page() {
-    const batches = await getPreviousBatches();
+    const batches = await getPreviousBatchesQuery();
 
     return (
         <>

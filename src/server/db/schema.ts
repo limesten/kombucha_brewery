@@ -2,7 +2,7 @@
 import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { z } from "zod";
-import { InferSelectModel } from "drizzle-orm";
+import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 
 export const batches = pgTable("batches", {
     id: serial("id").primaryKey(),
@@ -13,7 +13,7 @@ export const batches = pgTable("batches", {
     status: text("status").notNull(),
 });
 
-export const batchSchema = z.object({
+export const batchZodSchema = z.object({
     batchNumber: z
         .string()
         .min(1, {
@@ -27,3 +27,4 @@ export const batchSchema = z.object({
 });
 
 export type Batch = InferSelectModel<typeof batches>;
+export type NewBatch = InferInsertModel<typeof batches>;

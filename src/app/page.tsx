@@ -1,9 +1,9 @@
-import { getActiveBatches } from "@/server/queries";
+import { getActiveBatchesQuery } from "@/server/queries";
 import { CreateBatchDialog } from "./CreateBatchDialog";
 import { BatchDropdown } from "./BatchDropdown";
 
 export default async function Home() {
-    const batches = await getActiveBatches();
+    const batches = await getActiveBatchesQuery();
 
     const calcFinishDate = (startDate: Date): string => {
         const expectedBrewingDays = 7;

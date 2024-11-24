@@ -1,15 +1,14 @@
 "use server";
 
-import { db } from "@/server/db";
-import { batches, Batch } from "@/server/db/schema";
+import { Batch, NewBatch } from "@/server/db/schema";
 import { revalidatePath } from "next/cache";
 import { getErrorMessage } from "@/lib/utils";
-import { batchSchema } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
+import { batchZodSchema } from "@/server/db/schema";
 import { z } from "zod";
+import { insertBatchQuery, deleteBatchQuery, updateBatchQuery } from "@/server/queries";
 
-export async function createBatch(values: z.infer<typeof batchSchema>) {
-    const validatedFields = batchSchema.safeParse({
+export async function createBatch(values: z.infer<typeof batchZodSchema>) {
+    const validatedFields = batchZodSchema.safeParse({
         batchNumber: values.batchNumber,
         startDate: values.startDate,
     });
@@ -26,12 +25,14 @@ export async function createBatch(values: z.infer<typeof batchSchema>) {
         };
     }
 
+    const newBatch: NewBatch = {
+        batch_number: validatedFields.data.batchNumber,
+        start_date: validatedFields.data.startDate,
+        status: "Fermenting",
+    };
+
     try {
-        await db.insert(batches).values({
-            batch_number: validatedFields.data.batchNumber,
-            start_date: validatedFields.data.startDate,
-            status: "Fermenting",
-        });
+        await insertBatchQuery(newBatch);
     } catch (err) {
         return {
             error: getErrorMessage(err),
@@ -42,13 +43,23 @@ export async function createBatch(values: z.infer<typeof batchSchema>) {
 }
 
 export async function deleteBatch(id: number) {
-    await db.delete(batches).where(eq(batches.id, id));
-
+    try {
+        await deleteBatchQuery(id);
+    } catch (err) {
+        return {
+            error: getErrorMessage(err),
+        };
+    }
     revalidatePath("/");
 }
 
 export async function updateBatch(batch: Batch) {
-    await db.update(batches).set(batch).where(eq(batches.id, batch.id));
-
+    try {
+        await updateBatchQuery(batch);
+    } catch (err) {
+        return {
+            error: getErrorMessage(err),
+        };
+    }
     revalidatePath("/");
 }

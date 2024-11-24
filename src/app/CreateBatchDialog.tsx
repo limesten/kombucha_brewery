@@ -29,22 +29,22 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { batchSchema } from "@/server/db/schema";
+import { batchZodSchema } from "@/server/db/schema";
 import { createBatch } from "./actions";
 import { toast } from "sonner";
 
 export function CreateBatchDialog() {
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    const form = useForm<z.infer<typeof batchSchema>>({
-        resolver: zodResolver(batchSchema),
+    const form = useForm<z.infer<typeof batchZodSchema>>({
+        resolver: zodResolver(batchZodSchema),
         defaultValues: {
             batchNumber: "",
             startDate: new Date(),
         },
     });
 
-    const handleNewBatch = async (values: z.infer<typeof batchSchema>) => {
+    const handleNewBatch = async (values: z.infer<typeof batchZodSchema>) => {
         const result = await createBatch(values);
         if (result?.error) {
             toast(result.error);
