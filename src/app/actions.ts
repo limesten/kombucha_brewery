@@ -29,7 +29,7 @@ export async function createBatch(values: z.infer<typeof batchSchema>) {
     try {
         await db.insert(batches).values({
             batch_number: validatedFields.data.batchNumber,
-            start_date: validatedFields.data.startDate.toISOString().split("T")[0],
+            start_date: validatedFields.data.startDate,
             status: "Fermenting",
         });
     } catch (err) {

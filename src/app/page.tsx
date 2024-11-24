@@ -9,15 +9,15 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 export default async function Home() {
     const batches = await getActiveBatches();
 
-    const calcFinishDate = (startDate: string) => {
+    const calcFinishDate = (startDate: Date): string => {
         const expectedBrewingDays = 7;
-        const date = new Date(startDate);
-        date.setDate(date.getDate() + expectedBrewingDays);
-        return date.toISOString().split("T")[0];
+        startDate.setDate(startDate.getDate() + expectedBrewingDays);
+        return startDate.toISOString().split("T")[0];
     };
 
     return (
@@ -27,19 +27,23 @@ export default async function Home() {
                 <p className="mx-4 w-1/5">Start</p>
                 <p className="mx-4 w-1/5">Est. finish</p>
                 <p className="mx-4 w-1/5">Status</p>
-                <p className="mx-4 w-1/5">Actions</p>
+                <p className="mx-4 w-1/5">More</p>
             </div>
             {batches.map((batch) => (
                 <div key={batch.id}>
                     <div className="text-xl flex my-4">
                         <p className="mx-4 w-1/5">{batch.batch_number}</p>
-                        <p className="mx-4 w-1/5">{batch.start_date}</p>
+                        <p className="mx-4 w-1/5">
+                            {batch.start_date.toISOString().split("T")[0]}
+                        </p>
                         <p className="mx-4 w-1/5">{calcFinishDate(batch.start_date)}</p>
                         <p className="mx-4 w-1/5">{batch.status}</p>
 
                         <div className="mx-4 w-1/5">
                             <DropdownMenu>
-                                <DropdownMenuTrigger>...</DropdownMenuTrigger>
+                                <DropdownMenuTrigger asChild>
+                                    <Button variant="outline">...</Button>
+                                </DropdownMenuTrigger>
                                 <DropdownMenuContent>
                                     <DropdownMenuLabel>Batch Actions</DropdownMenuLabel>
                                     <DropdownMenuSeparator />

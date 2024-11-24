@@ -10,7 +10,9 @@
 -   [x] Add pagination
 -   [x] Add past production page
 -   [x] Add navbar
+-   [x] Change from SQlite to Postgres
 -   [ ] Calc days left
+-   [ ] Finish date
 -   [ ] Progress bar
 -   [ ] Authentification
 -   [ ] Email notifications

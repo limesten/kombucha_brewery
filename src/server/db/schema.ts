@@ -1,13 +1,15 @@
-import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+//import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { z } from "zod";
 
-export const batches = sqliteTable("batches", {
-    id: int().primaryKey({ autoIncrement: true }),
-    batch_number: text().notNull(),
-    start_date: text().notNull(),
-    created_at: text().default(sql`CURRENT_TIMESTAMP`),
-    status: text().notNull(),
+export const batches = pgTable("batches", {
+    id: serial("id").primaryKey(),
+    batch_number: text("batch_number").notNull(),
+    start_date: timestamp("start_date").notNull(),
+    finish_date: timestamp("finish_date"),
+    created_at: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
+    status: text("status").notNull(),
 });
 
 export const batchSchema = z.object({
