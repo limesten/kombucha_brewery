@@ -10,8 +10,8 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { deleteBatch } from "./actions";
-import { CompleteBatchDialog } from "./CompleteBatchDialog";
+import { deleteBatch } from "@/app/actions";
+import { CompleteBatchDialog } from "@/app/in-production/CompleteBatchDialog";
 import { Batch } from "@/server/db/schema";
 import { toast } from "sonner";
 

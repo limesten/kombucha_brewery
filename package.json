@@ -11,6 +11,7 @@
         "db:studio": "drizzle-kit studio"
     },
     "dependencies": {
+        "@clerk/nextjs": "^6.5.0",
         "@electric-sql/pglite": "^0.2.13",
         "@hookform/resolvers": "^3.9.1",
         "@libsql/client": "^0.14.0",

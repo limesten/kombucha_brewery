@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { TopNav } from "./TopNav";
+import {
+    ClerkProvider,
+    SignInButton,
+    SignedIn,
+    SignedOut,
+    UserButton,
+} from "@clerk/nextjs";
 
 export const metadata: Metadata = {
     title: "Kombucha Brewery",
@@ -14,14 +21,21 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body>
-                <div className="container mx-auto max-w-[800px]">
-                    <TopNav />
-                    {children}
-                    <Toaster position="top-right" />
-                </div>
-            </body>
-        </html>
+        <ClerkProvider>
+            <html lang="en">
+                <body>
+                    <div className="container mx-auto max-w-[800px]">
+                        <SignedIn>
+                            <TopNav />
+                        </SignedIn>
+                        {children}
+                        <Toaster position="top-right" />
+                        <SignedIn>
+                            <UserButton />
+                        </SignedIn>
+                    </div>
+                </body>
+            </html>
+        </ClerkProvider>
     );
 }

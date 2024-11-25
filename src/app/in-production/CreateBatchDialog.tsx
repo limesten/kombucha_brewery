@@ -37,7 +37,7 @@ import {
 } from "@/components/ui/select";
 
 import { batchZodSchema } from "@/server/db/schema";
-import { createBatch } from "./actions";
+import { createBatch } from "@/app/actions";
 import { toast } from "sonner";
 
 export function CreateBatchDialog() {

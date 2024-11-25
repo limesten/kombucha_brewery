@@ -29,7 +29,9 @@ export default async function Page() {
                         <p className="mx-4 w-1/5">
                             {batch.start_date.toISOString().split("T")[0]}
                         </p>
-                        <p className="mx-4 w-1/5">todo</p>
+                        <p className="mx-4 w-1/5">
+                            {batch.finish_date?.toISOString().split("T")[0]}
+                        </p>
                         <p className="mx-4 w-1/5">{batch.status}</p>
                         <div className="mx-4 w-1/5">
                             <DropdownMenu>

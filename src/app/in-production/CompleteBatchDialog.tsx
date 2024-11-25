@@ -6,7 +6,7 @@ import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Batch } from "@/server/db/schema";
-import { updateBatch } from "./actions";
+import { updateBatch } from "@/app/actions";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";

@@ -12,9 +12,14 @@
 -   [x] Add navbar
 -   [x] Change from SQlite to Postgres
 -   [ ] Calc days left
--   [ ] Finish date
+-   [x] Finish date
 -   [ ] Progress bar
--   [ ] Authentification
--   [ ] Email notifications
+-   [ ] Authentification /w clerk
+-   [ ] Email notifications with nodemailer
 -   [x] Dropdown for delete batch / mark as done
--   [ ] Choose batch status during creation
+-   [x] Choose batch status during creation
+-   [ ] Colorize UI
+-   [ ] Sugar / tea /water ratio calculator
+-   [ ] Deploy on VPS?
+-   [ ] Display cost savings
+-   [ ] New front page with login

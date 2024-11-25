@@ -6,10 +6,10 @@ export function TopNav() {
 
     return (
         <nav className="w-full flex justify-center py-4">
-            <Link href="/">
+            <Link href="/in-production">
                 <h2
                     className={`text-xl font-semibold mx-4 ${
-                        pathname === "/" ? "border-b-2 border-black" : ""
+                        pathname === "/in-production" ? "border-b-2 border-black" : ""
                     }`}
                 >
                     In production
