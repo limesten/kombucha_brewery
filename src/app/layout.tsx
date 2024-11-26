@@ -30,9 +30,6 @@ export default function RootLayout({
                         </SignedIn>
                         {children}
                         <Toaster position="top-right" />
-                        <SignedIn>
-                            <UserButton />
-                        </SignedIn>
                     </div>
                 </body>
             </html>

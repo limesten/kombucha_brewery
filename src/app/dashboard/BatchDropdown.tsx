@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { deleteBatch } from "@/app/actions";
-import { CompleteBatchDialog } from "@/app/in-production/CompleteBatchDialog";
+import { CompleteBatchDialog } from "@/app/dashboard/CompleteBatchDialog";
 import { Batch } from "@/server/db/schema";
 import { toast } from "sonner";
 
