@@ -7,11 +7,11 @@ export function TopNav() {
     const pathname = usePathname();
 
     return (
-        <nav className="w-full grid grid-cols-2 items-center py-4">
+        <nav className="w-full grid grid-cols-2 py-4">
             <div className="flex">
                 <Link href="/dashboard">
                     <h2
-                        className={`text-xl font-semibold mx-4 ${
+                        className={`text-xl font-semibold mr-4 ${
                             pathname === "/dashboard" ? "border-b-2 border-black" : ""
                         }`}
                     >
@@ -20,7 +20,7 @@ export function TopNav() {
                 </Link>
                 <Link href="/dashboard/past-production">
                     <h2
-                        className={`text-xl font-semibold mx-4 ${
+                        className={`text-xl font-semibold ${
                             pathname === "/dashboard/past-production"
                                 ? "border-b-2 border-black"
                                 : ""

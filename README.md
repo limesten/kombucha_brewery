@@ -11,10 +11,10 @@
 -   [x] Add past production page
 -   [x] Add navbar
 -   [x] Change from SQlite to Postgres
--   [ ] Calc days left
+-   [x] Calc days left
 -   [x] Finish date
--   [ ] Progress bar
--   [ ] Authentification /w clerk
+-   [x] Progress bar
+-   [x] Authentification /w clerk
 -   [ ] Email notifications with nodemailer
 -   [x] Dropdown for delete batch / mark as done
 -   [x] Choose batch status during creation
@@ -22,4 +22,4 @@
 -   [ ] Sugar / tea /water ratio calculator
 -   [ ] Deploy on VPS?
 -   [ ] Display cost savings
--   [ ] New front page with login
+-   [x] New front page with login

@@ -5,7 +5,7 @@ export default async function Home() {
         <>
             <div className="w-full text-center">
                 <h1 className="text-2xl font-bold p-4">Kombucha brewery</h1>
-                <p className="text-xl p-2">Please sign in below</p>
+                <p className="text-xl p-2">Welcome! Please sign in below</p>
                 <SignedOut>
                     <SignInButton forceRedirectUrl={"/in-production"}>
                         <Button>Sign in</Button>
