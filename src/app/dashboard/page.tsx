@@ -54,12 +54,12 @@ export default async function InProduction() {
                 <div key={batch.id}>
                     <div className="text-xl flex my-4">
                         <p className="mr-4 w-1/5">todo</p>
-                        <p className="mr-4 w-1/5">{batch.batch_number}</p>
+                        <p className="mr-4 w-1/5">{batch.batchNumber}</p>
                         <p className="mr-4 w-1/5">
-                            {batch.start_date.toISOString().split("T")[0]}
+                            {batch.startDate.toISOString().split("T")[0]}
                         </p>
                         <p className="mr-4 w-1/5">
-                            {calcFinishDate(batch.start_date).toISOString().split("T")[0]}
+                            {calcFinishDate(batch.startDate).toISOString().split("T")[0]}
                         </p>
 
                         <div className="mr-4 w-1/5">
@@ -70,10 +70,10 @@ export default async function InProduction() {
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <Progress value={calcProgress(batch.start_date)} />
+                                    <Progress value={calcProgress(batch.startDate)} />
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    Estimated {calcDaysLeft(batch.start_date)} days left
+                                    Estimated {calcDaysLeft(batch.startDate)} days left
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>

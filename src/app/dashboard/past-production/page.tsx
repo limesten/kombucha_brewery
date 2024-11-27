@@ -26,12 +26,12 @@ export default async function Page() {
                 <div key={batch.id}>
                     <div className="text-xl flex my-4">
                         <p className="mr-4 w-1/5">todo</p>
-                        <p className="mr-4 w-1/5">{batch.batch_number}</p>
+                        <p className="mr-4 w-1/5">{batch.batchNumber}</p>
                         <p className="mr-4 w-1/5">
-                            {batch.start_date.toISOString().split("T")[0]}
+                            {batch.startDate.toISOString().split("T")[0]}
                         </p>
                         <p className="mr-4 w-1/5">
-                            {batch.finish_date?.toISOString().split("T")[0]}
+                            {batch.finishDate?.toISOString().split("T")[0]}
                         </p>
                         <div className="mr-4 w-1/5">
                             <DropdownMenu>

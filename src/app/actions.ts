@@ -27,8 +27,8 @@ export async function createBatch(values: z.infer<typeof batchZodSchema>) {
     }
 
     const newBatch: NewBatch = {
-        batch_number: validatedFields.data.batchNumber,
-        start_date: validatedFields.data.startDate,
+        batchNumber: validatedFields.data.batchNumber,
+        startDate: validatedFields.data.startDate,
         status: validatedFields.data.status,
     };
 

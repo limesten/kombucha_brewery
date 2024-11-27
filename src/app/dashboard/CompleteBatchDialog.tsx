@@ -50,7 +50,7 @@ export function CompleteBatchDialog({
     });
 
     const handleCompleteBatch = async (values: z.infer<typeof FormSchema>) => {
-        batch.finish_date = values.finishDate;
+        batch.finishDate = values.finishDate;
         batch.status = "Finished";
         const result = await updateBatch(batch);
         if (result?.error) {

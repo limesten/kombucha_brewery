@@ -5,10 +5,10 @@ import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 
 export const batches = pgTable("batches", {
     id: serial("id").primaryKey(),
-    batch_number: text("batch_number").notNull(),
-    start_date: timestamp("start_date").notNull(),
-    finish_date: timestamp("finish_date"),
-    created_at: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
+    batchNumber: text("batch_number").notNull(),
+    startDate: timestamp("start_date").notNull(),
+    finishDate: timestamp("finish_date"),
+    createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
     status: text("status").notNull(),
 });
 
