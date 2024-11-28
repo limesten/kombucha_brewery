@@ -1,3 +1,10 @@
+import { AddBrewingVesselDialog } from "./AddBrewingVesselDialog";
+
 export default async function Settings() {
-    return <h1>Sitings</h1>;
+    return (
+        <>
+            <h2>Brewing vessels</h2>
+            <AddBrewingVesselDialog />
+        </>
+    );
 }

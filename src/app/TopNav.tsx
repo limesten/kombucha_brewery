@@ -20,13 +20,24 @@ export function TopNav() {
                 </Link>
                 <Link href="/dashboard/past-production">
                     <h2
-                        className={`text-xl font-semibold ${
+                        className={`text-xl font-semibold mr-4 ${
                             pathname === "/dashboard/past-production"
                                 ? "border-b-2 border-black"
                                 : ""
                         }`}
                     >
                         Past production
+                    </h2>
+                </Link>
+                <Link href="/dashboard/settings">
+                    <h2
+                        className={`text-xl font-semibold ${
+                            pathname === "/dashboard/settings"
+                                ? "border-b-2 border-black"
+                                : ""
+                        }`}
+                    >
+                        Settings
                     </h2>
                 </Link>
             </div>

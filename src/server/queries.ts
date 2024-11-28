@@ -1,7 +1,7 @@
 import "server-only";
 import { db } from "./db";
 import { ne, eq, and } from "drizzle-orm";
-import { batches, Batch, NewBatch } from "./db/schema";
+import { batches, Batch, NewBatch, brewingVessels, NewBrewingVessel } from "./db/schema";
 import { auth } from "@clerk/nextjs/server";
 
 export async function getActiveBatchesQuery() {
@@ -49,4 +49,8 @@ export async function updateBatchQuery(batch: Batch) {
         .update(batches)
         .set(batch)
         .where(and(eq(batches.id, batch.id), eq(batches.userId, userId)));
+}
+
+export async function insertBrewingVesselQuery(brewingVessel: NewBrewingVessel) {
+    await db.insert(brewingVessels).values(brewingVessel);
 }
