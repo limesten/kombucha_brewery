@@ -6,8 +6,16 @@ import { getErrorMessage } from "@/lib/utils";
 import { batchZodSchema } from "@/server/db/schema";
 import { z } from "zod";
 import { insertBatchQuery, deleteBatchQuery, updateBatchQuery } from "@/server/queries";
+import { auth } from "@clerk/nextjs/server";
 
 export async function createBatch(values: z.infer<typeof batchZodSchema>) {
+    const { userId } = await auth();
+    if (!userId) {
+        return {
+            error: "Unauthorized",
+        };
+    }
+
     const validatedFields = batchZodSchema.safeParse({
         batchNumber: values.batchNumber,
         startDate: values.startDate,
@@ -30,6 +38,7 @@ export async function createBatch(values: z.infer<typeof batchZodSchema>) {
         batchNumber: validatedFields.data.batchNumber,
         startDate: validatedFields.data.startDate,
         status: validatedFields.data.status,
+        userId: userId,
     };
 
     try {

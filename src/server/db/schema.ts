@@ -10,6 +10,7 @@ export const batches = pgTable("batches", {
     finishDate: timestamp("finish_date"),
     createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
     status: text("status").notNull(),
+    userId: text("user_id").notNull(),
 });
 
 export const batchZodSchema = z.object({

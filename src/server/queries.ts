@@ -1,23 +1,29 @@
 import "server-only";
 import { db } from "./db";
-import { ne, eq } from "drizzle-orm";
+import { ne, eq, and } from "drizzle-orm";
 import { batches, Batch, NewBatch } from "./db/schema";
-
-export async function getBatchesQuery() {
-    const batches = await db.query.batches.findMany();
-    return batches;
-}
+import { auth } from "@clerk/nextjs/server";
 
 export async function getActiveBatchesQuery() {
+    const { userId } = await auth();
+    if (!userId) {
+        throw new Error("Unauthorized");
+    }
+
     const batches = await db.query.batches.findMany({
-        where: (batches) => ne(batches.status, "Finished"),
+        where: (batches) => ne(batches.status, "Finished") && eq(batches.userId, userId),
     });
     return batches;
 }
 
 export async function getPreviousBatchesQuery() {
+    const { userId } = await auth();
+    if (!userId) {
+        throw new Error("Unauthorized");
+    }
+
     const batches = await db.query.batches.findMany({
-        where: (batches) => eq(batches.status, "Finished"),
+        where: (batches) => eq(batches.status, "Finished") && eq(batches.userId, userId),
     });
     return batches;
 }
@@ -27,9 +33,20 @@ export async function insertBatchQuery(batch: NewBatch) {
 }
 
 export async function deleteBatchQuery(id: number) {
-    await db.delete(batches).where(eq(batches.id, id));
+    const { userId } = await auth();
+    if (!userId) {
+        throw new Error("Unauthorized");
+    }
+    await db.delete(batches).where(and(eq(batches.id, id), eq(batches.userId, userId)));
 }
 
 export async function updateBatchQuery(batch: Batch) {
-    await db.update(batches).set(batch).where(eq(batches.id, batch.id));
+    const { userId } = await auth();
+    if (!userId) {
+        throw new Error("Unauthorized");
+    }
+    await db
+        .update(batches)
+        .set(batch)
+        .where(and(eq(batches.id, batch.id), eq(batches.userId, userId)));
 }
