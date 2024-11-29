@@ -10,7 +10,6 @@ import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import { Input } from "@/components/ui/input";
 import {
     Form,
     FormControl,
@@ -36,17 +35,21 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 
-import { batchZodSchema } from "@/server/db/schema";
+import { batchZodSchema, BrewingVessel } from "@/server/db/schema";
 import { createBatch } from "@/app/actions";
 import { toast } from "sonner";
 
-export function CreateBatchDialog() {
+export function CreateBatchDialog({
+    brewingVessels,
+}: {
+    brewingVessels: BrewingVessel[];
+}) {
     const [dialogOpen, setDialogOpen] = useState(false);
 
     const form = useForm<z.infer<typeof batchZodSchema>>({
         resolver: zodResolver(batchZodSchema),
         defaultValues: {
-            batchNumber: "",
+            brewingVesselName: "",
             startDate: new Date(),
             status: "",
         },
@@ -74,13 +77,33 @@ export function CreateBatchDialog() {
                         <div className="my-4">
                             <FormField
                                 control={form.control}
-                                name="batchNumber"
+                                name="brewingVesselName"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Batch number</FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
+                                        <FormLabel>Brewing vessel</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select current status" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {brewingVessels &&
+                                                    brewingVessels.map(
+                                                        (brewingVessel) => (
+                                                            <SelectItem
+                                                                value={brewingVessel.name}
+                                                                key={brewingVessel.id}
+                                                            >
+                                                                {brewingVessel.name}
+                                                            </SelectItem>
+                                                        )
+                                                    )}
+                                            </SelectContent>
+                                        </Select>
                                         <FormMessage />
                                     </FormItem>
                                 )}
@@ -103,11 +126,11 @@ export function CreateBatchDialog() {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                <SelectItem value="Preparing">
-                                                    Preparing
+                                                <SelectItem value="First fermentation">
+                                                    First fermentation
                                                 </SelectItem>
-                                                <SelectItem value="Fermenting">
-                                                    Fermenting
+                                                <SelectItem value="Second fermentation">
+                                                    Second fermentation
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>

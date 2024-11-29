@@ -1,11 +1,19 @@
-import { pgTable, serial, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core";
+import {
+    pgTable,
+    serial,
+    text,
+    integer,
+    timestamp,
+    uniqueIndex,
+} from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { z } from "zod";
 import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 
 export const batches = pgTable("batches", {
     id: serial("id").primaryKey(),
-    batchNumber: text("batch_number").notNull(),
+    brewingVessel: text("brewing_vessel").notNull(),
+    batchNumber: integer("batch_number").notNull(),
     startDate: timestamp("start_date").notNull(),
     finishDate: timestamp("finish_date"),
     createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
@@ -27,13 +35,13 @@ export const brewingVessels = pgTable(
 );
 
 export const batchZodSchema = z.object({
-    batchNumber: z
+    brewingVesselName: z
         .string()
         .min(1, {
-            message: "Batch number must be at least 1 character",
+            message: "Brewing vessel name must be at least 1 character",
         })
-        .max(20, {
-            message: "Batch number must be at most 20 characters",
+        .max(30, {
+            message: "Brewing vessel name must be at most 30 characters",
         })
         .trim(),
     startDate: z.date(),

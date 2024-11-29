@@ -1,4 +1,4 @@
-import { getActiveBatchesQuery } from "@/server/queries";
+import { getActiveBatchesQuery, getBrewingVesselsQuery } from "@/server/queries";
 import { CreateBatchDialog } from "./CreateBatchDialog";
 import { BatchDropdown } from "./BatchDropdown";
 import { Progress } from "@/components/ui/progress";
@@ -39,6 +39,7 @@ const calcProgress = (startDate: Date) => {
 
 export default async function InProduction() {
     const batches = await getActiveBatchesQuery();
+    const brewingVessels = await getBrewingVesselsQuery();
 
     return (
         <>
@@ -53,7 +54,7 @@ export default async function InProduction() {
             {batches.map((batch) => (
                 <div key={batch.id}>
                     <div className="text-xl flex my-4">
-                        <p className="mr-4 w-1/5">todo</p>
+                        <p className="mr-4 w-1/5">{batch.brewingVessel}</p>
                         <p className="mr-4 w-1/5">{batch.batchNumber}</p>
                         <p className="mr-4 w-1/5">
                             {batch.startDate.toISOString().split("T")[0]}
@@ -82,7 +83,7 @@ export default async function InProduction() {
                 </div>
             ))}
             <div className="w-full flex justify-center py-4">
-                <CreateBatchDialog />
+                <CreateBatchDialog brewingVessels={brewingVessels} />
             </div>
             <h2 className="text-xl mt-4 mb-6 font-semibold">Second fermentation</h2>
         </>

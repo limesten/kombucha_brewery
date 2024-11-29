@@ -1,6 +1,6 @@
 "use server";
 
-import { Batch, BrewingVessel, NewBatch, NewBrewingVessel } from "@/server/db/schema";
+import { Batch, NewBatch, NewBrewingVessel } from "@/server/db/schema";
 import { revalidatePath } from "next/cache";
 import { getErrorMessage } from "@/lib/utils";
 import { batchZodSchema, brewingVesselZodSchema } from "@/server/db/schema";
@@ -10,6 +10,7 @@ import {
     deleteBatchQuery,
     updateBatchQuery,
     insertBrewingVesselQuery,
+    getHighestBatchNumberQuery,
 } from "@/server/queries";
 import { auth } from "@clerk/nextjs/server";
 
@@ -22,7 +23,7 @@ export async function createBatch(values: z.infer<typeof batchZodSchema>) {
     }
 
     const validatedFields = batchZodSchema.safeParse({
-        batchNumber: values.batchNumber,
+        brewingVesselName: values.brewingVesselName,
         startDate: values.startDate,
         status: values.status,
     });
@@ -39,8 +40,12 @@ export async function createBatch(values: z.infer<typeof batchZodSchema>) {
         };
     }
 
+    const highestBatchNumber = await getHighestBatchNumberQuery();
+    const batchNumber = highestBatchNumber + 1;
+
     const newBatch: NewBatch = {
-        batchNumber: validatedFields.data.batchNumber,
+        batchNumber: batchNumber,
+        brewingVessel: validatedFields.data.brewingVesselName,
         startDate: validatedFields.data.startDate,
         status: validatedFields.data.status,
         userId: userId,
