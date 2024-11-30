@@ -15,6 +15,7 @@ export const batches = pgTable("batches", {
     brewingVessel: text("brewing_vessel").notNull(),
     batchNumber: integer("batch_number").notNull(),
     startDate: timestamp("start_date").notNull(),
+    secondFermentationStart: timestamp("second_fermentation_start"),
     finishDate: timestamp("finish_date"),
     createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
     status: text("status").notNull(),

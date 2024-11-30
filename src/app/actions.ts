@@ -76,6 +76,7 @@ export async function deleteBatch(id: number) {
 export async function updateBatch(batch: Batch) {
     try {
         await updateBatchQuery(batch);
+        console.log(`Actions: ${batch.secondFermentationStart}`);
     } catch (err) {
         return {
             error: getErrorMessage(err),

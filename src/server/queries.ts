@@ -6,26 +6,13 @@ import { auth } from "@clerk/nextjs/server";
 
 // Batch queries
 
-export async function getActiveBatchesQuery() {
+export async function getBatchesByStatusQuery(status: string) {
     const { userId } = await auth();
     if (!userId) {
         throw new Error("Unauthorized");
     }
-
     const batches = await db.query.batches.findMany({
-        where: (batches) => ne(batches.status, "Finished") && eq(batches.userId, userId),
-    });
-    return batches;
-}
-
-export async function getPreviousBatchesQuery() {
-    const { userId } = await auth();
-    if (!userId) {
-        throw new Error("Unauthorized");
-    }
-
-    const batches = await db.query.batches.findMany({
-        where: (batches) => eq(batches.status, "Finished") && eq(batches.userId, userId),
+        where: (batches) => and(eq(batches.status, status), eq(batches.userId, userId)),
     });
     return batches;
 }
@@ -47,6 +34,7 @@ export async function updateBatchQuery(batch: Batch) {
     if (!userId) {
         throw new Error("Unauthorized");
     }
+    console.log(`queries: ${batch.secondFermentationStart}`);
     await db
         .update(batches)
         .set(batch)

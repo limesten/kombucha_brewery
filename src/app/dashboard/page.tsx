@@ -1,4 +1,4 @@
-import { getActiveBatchesQuery, getBrewingVesselsQuery } from "@/server/queries";
+import { getBatchesByStatusQuery, getBrewingVesselsQuery } from "@/server/queries";
 import { CreateBatchDialog } from "./CreateBatchDialog";
 import { BatchDropdown } from "./BatchDropdown";
 import { Progress } from "@/components/ui/progress";
@@ -8,16 +8,27 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { FERMENTATION_DAYS, PROD_STATUS } from "@/constants";
+import { Batch } from "@/server/db/schema";
 
-const calcFinishDate = (startDate: Date): Date => {
-    const expectedBrewingDays = 7;
-    const expectedFinishDate = new Date(startDate);
+const calcFinishDate = (batch: Batch): Date => {
+    let expectedBrewingDays: number;
+    let expectedFinishDate: Date;
+    if (batch.status == PROD_STATUS.FIRST_FERMENTATION) {
+        expectedBrewingDays = FERMENTATION_DAYS.FIRST_FERMENTATION;
+        expectedFinishDate = new Date(batch.startDate);
+    } else if (batch.status == PROD_STATUS.SECOND_FERMENTATION) {
+        expectedBrewingDays = FERMENTATION_DAYS.SECOND_FERMENTATION;
+        expectedFinishDate = new Date(batch.secondFermentationStart!);
+    } else {
+        throw new Error("Unknown batch status when calculating finish date");
+    }
     expectedFinishDate.setDate(expectedFinishDate.getDate() + expectedBrewingDays);
     return expectedFinishDate;
 };
 
-const calcDaysLeft = (startDate: Date) => {
-    const estimatedFinishDate = calcFinishDate(startDate);
+const calcDaysLeft = (batch: Batch) => {
+    const estimatedFinishDate = calcFinishDate(batch);
     const currentDate = new Date();
     const timeLeft = estimatedFinishDate.getTime() - currentDate.getTime();
     const daysleft = timeLeft / (1000 * 60 * 60 * 24);
@@ -25,11 +36,11 @@ const calcDaysLeft = (startDate: Date) => {
     return Math.max(0, Math.floor(daysleft));
 };
 
-const calcProgress = (startDate: Date) => {
-    const estimatedFinishDate = calcFinishDate(startDate);
+const calcProgress = (batch: Batch) => {
+    const estimatedFinishDate = calcFinishDate(batch);
     const currentDate = new Date();
-    const totalTime = estimatedFinishDate.getTime() - startDate.getTime();
-    const elapsedTime = currentDate.getTime() - startDate.getTime();
+    const totalTime = estimatedFinishDate.getTime() - batch.startDate.getTime();
+    const elapsedTime = currentDate.getTime() - batch.startDate.getTime();
 
     let progress = (elapsedTime / totalTime) * 100;
     progress = Math.min(Math.max(progress, 0));
@@ -38,7 +49,12 @@ const calcProgress = (startDate: Date) => {
 };
 
 export default async function InProduction() {
-    const batches = await getActiveBatchesQuery();
+    const firstStageBatches = await getBatchesByStatusQuery(
+        PROD_STATUS.FIRST_FERMENTATION
+    );
+    const secondStageBatches = await getBatchesByStatusQuery(
+        PROD_STATUS.SECOND_FERMENTATION
+    );
     const brewingVessels = await getBrewingVesselsQuery();
 
     return (
@@ -51,7 +67,7 @@ export default async function InProduction() {
                 <p className="mr-4 w-1/5">Est. finish</p>
                 <p className="mr-4 w-1/5">More</p>
             </div>
-            {batches.map((batch) => (
+            {firstStageBatches.map((batch) => (
                 <div key={batch.id}>
                     <div className="text-xl flex my-4">
                         <p className="mr-4 w-1/5">{batch.brewingVessel}</p>
@@ -60,7 +76,7 @@ export default async function InProduction() {
                             {batch.startDate.toISOString().split("T")[0]}
                         </p>
                         <p className="mr-4 w-1/5">
-                            {calcFinishDate(batch.startDate).toISOString().split("T")[0]}
+                            {calcFinishDate(batch).toISOString().split("T")[0]}
                         </p>
 
                         <div className="mr-4 w-1/5">
@@ -71,10 +87,10 @@ export default async function InProduction() {
                         <TooltipProvider>
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <Progress value={calcProgress(batch.startDate)} />
+                                    <Progress value={calcProgress(batch)} />
                                 </TooltipTrigger>
                                 <TooltipContent>
-                                    Estimated {calcDaysLeft(batch.startDate)} days left
+                                    Estimated {calcDaysLeft(batch)} days left
                                 </TooltipContent>
                             </Tooltip>
                         </TooltipProvider>
@@ -86,6 +102,44 @@ export default async function InProduction() {
                 <CreateBatchDialog brewingVessels={brewingVessels} />
             </div>
             <h2 className="text-xl mt-4 mb-6 font-semibold">Second fermentation</h2>
+            <div className="text-xl flex my-4">
+                <p className="mr-4 w-1/5">Brewing vessel</p>
+                <p className="mr-4 w-1/5">Batch</p>
+                <p className="mr-4 w-1/5">Start</p>
+                <p className="mr-4 w-1/5">Est. finish</p>
+                <p className="mr-4 w-1/5">More</p>
+            </div>
+            {secondStageBatches.map((batch) => (
+                <div key={batch.id}>
+                    <div className="text-xl flex my-4">
+                        <p className="mr-4 w-1/5">{batch.brewingVessel}</p>
+                        <p className="mr-4 w-1/5">{batch.batchNumber}</p>
+                        <p className="mr-4 w-1/5">
+                            {batch.secondFermentationStart?.toISOString().split("T")[0]}
+                        </p>
+                        <p className="mr-4 w-1/5">
+                            {calcFinishDate(batch).toISOString().split("T")[0]}
+                        </p>
+
+                        <div className="mr-4 w-1/5">
+                            <BatchDropdown batch={batch} />
+                        </div>
+                    </div>
+                    <div className="my-6">
+                        <TooltipProvider>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Progress value={calcProgress(batch)} />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    Estimated {calcDaysLeft(batch)} days left
+                                </TooltipContent>
+                            </Tooltip>
+                        </TooltipProvider>
+                    </div>
+                    <hr className="my-4 border-t border-gray-400" />
+                </div>
+            ))}
         </>
     );
 }

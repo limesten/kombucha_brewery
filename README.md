@@ -18,8 +18,11 @@
 -   [ ] Email notifications with nodemailer
 -   [x] Dropdown for delete batch / mark as done
 -   [x] Choose batch status during creation
+-   [x] Split into first/second fermentation
 -   [ ] Colorize UI
 -   [ ] Sugar / tea /water ratio calculator
 -   [ ] Deploy on VPS?
 -   [ ] Display cost savings
+-   [ ] Fix timezone covertion problems
 -   [x] New front page with login
+-   [ ] Replace constants with actual user settings

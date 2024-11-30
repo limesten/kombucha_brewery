@@ -1,4 +1,4 @@
-import { getPreviousBatchesQuery } from "@/server/queries";
+import { getBatchesByStatusQuery } from "@/server/queries";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { deleteBatch } from "@/app/actions";
 
 export default async function Page() {
-    const batches = await getPreviousBatchesQuery();
+    const batches = await getBatchesByStatusQuery("Finished");
 
     return (
         <>
@@ -25,7 +25,7 @@ export default async function Page() {
             {batches.map((batch) => (
                 <div key={batch.id}>
                     <div className="text-xl flex my-4">
-                        <p className="mr-4 w-1/5">todo</p>
+                        <p className="mr-4 w-1/5">{batch.brewingVessel}</p>
                         <p className="mr-4 w-1/5">{batch.batchNumber}</p>
                         <p className="mr-4 w-1/5">
                             {batch.startDate.toISOString().split("T")[0]}
