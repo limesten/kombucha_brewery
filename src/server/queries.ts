@@ -1,15 +1,15 @@
-import "server-only";
-import { db } from "./db";
-import { ne, eq, and } from "drizzle-orm";
-import { batches, Batch, NewBatch, brewingVessels, NewBrewingVessel } from "./db/schema";
-import { auth } from "@clerk/nextjs/server";
+import 'server-only';
+import { db } from './db';
+import { ne, eq, and } from 'drizzle-orm';
+import { batches, Batch, NewBatch, brewingVessels, NewBrewingVessel, brewSettings, NewBrewSettings } from './db/schema';
+import { auth } from '@clerk/nextjs/server';
 
 // Batch queries
 
 export async function getBatchesByStatusQuery(status: string) {
     const { userId } = await auth();
     if (!userId) {
-        throw new Error("Unauthorized");
+        throw new Error('Unauthorized');
     }
     const batches = await db.query.batches.findMany({
         where: (batches) => and(eq(batches.status, status), eq(batches.userId, userId)),
@@ -24,7 +24,7 @@ export async function insertBatchQuery(batch: NewBatch) {
 export async function deleteBatchQuery(id: number) {
     const { userId } = await auth();
     if (!userId) {
-        throw new Error("Unauthorized");
+        throw new Error('Unauthorized');
     }
     await db.delete(batches).where(and(eq(batches.id, id), eq(batches.userId, userId)));
 }
@@ -32,7 +32,7 @@ export async function deleteBatchQuery(id: number) {
 export async function updateBatchQuery(batch: Batch) {
     const { userId } = await auth();
     if (!userId) {
-        throw new Error("Unauthorized");
+        throw new Error('Unauthorized');
     }
     console.log(`queries: ${batch.secondFermentationStart}`);
     await db
@@ -44,7 +44,7 @@ export async function updateBatchQuery(batch: Batch) {
 export async function getHighestBatchNumberQuery() {
     const { userId } = await auth();
     if (!userId) {
-        throw new Error("Unauthorized");
+        throw new Error('Unauthorized');
     }
     const highestBatch = await db.query.batches.findFirst({
         where: (batches) => eq(batches.userId, userId),
@@ -63,11 +63,44 @@ export async function insertBrewingVesselQuery(brewingVessel: NewBrewingVessel) 
 export async function getBrewingVesselsQuery() {
     const { userId } = await auth();
     if (!userId) {
-        throw new Error("Unauthorized");
+        throw new Error('Unauthorized');
     }
     const rows = await db.query.brewingVessels.findMany({
         where: eq(brewingVessels.userId, userId),
     });
 
     return rows;
+}
+
+// Brew settings
+
+export async function getBrewSettings() {
+    const { userId } = await auth();
+    if (!userId) {
+        throw new Error('Unauthorized');
+    }
+    const rows = await db.query.brewSettings.findFirst({
+        where: eq(brewingVessels.userId, userId),
+    });
+
+    const settings = await db.select().from(brewSettings).where(eq(brewSettings.userId, userId)).limit(1);
+
+    if (settings.length > 0) {
+        return settings[0];
+    }
+
+    const defaultSettings = await db.select().from(brewSettings).where(eq(brewSettings.userId, 'default')).limit(1);
+
+    if (defaultSettings.length > 0) {
+        return defaultSettings[0];
+    }
+
+    throw new Error('Default brew settings not found');
+}
+
+export async function upsertBrewSettings(newBrewSettings: NewBrewSettings) {
+    await db.insert(brewSettings).values(newBrewSettings).onConflictDoUpdate({
+        target: brewSettings.userId,
+        set: newBrewSettings,
+    });
 }

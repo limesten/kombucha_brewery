@@ -1,24 +1,26 @@
-"use server";
+'use server';
 
-import { Batch, NewBatch, NewBrewingVessel } from "@/server/db/schema";
-import { revalidatePath } from "next/cache";
-import { getErrorMessage } from "@/lib/utils";
-import { batchZodSchema, brewingVesselZodSchema } from "@/server/db/schema";
-import { z } from "zod";
+import { Batch, brewSettingsZodSchema, NewBatch, NewBrewingVessel, NewBrewSettings } from '@/server/db/schema';
+import { revalidatePath } from 'next/cache';
+import { getErrorMessage } from '@/lib/utils';
+import { batchZodSchema, brewingVesselZodSchema } from '@/server/db/schema';
+import { z } from 'zod';
 import {
     insertBatchQuery,
     deleteBatchQuery,
     updateBatchQuery,
     insertBrewingVesselQuery,
     getHighestBatchNumberQuery,
-} from "@/server/queries";
-import { auth } from "@clerk/nextjs/server";
+    upsertBrewSettings,
+} from '@/server/queries';
+import { auth } from '@clerk/nextjs/server';
+import { PROD_STATUS } from '@/constants';
 
 export async function createBatch(values: z.infer<typeof batchZodSchema>) {
     const { userId } = await auth();
     if (!userId) {
         return {
-            error: "Unauthorized",
+            error: 'Unauthorized',
         };
     }
 
@@ -29,10 +31,10 @@ export async function createBatch(values: z.infer<typeof batchZodSchema>) {
     });
 
     if (!validatedFields.success) {
-        let errorMessage = "";
+        let errorMessage = '';
 
         validatedFields.error.issues.forEach((issue) => {
-            errorMessage = errorMessage + issue.path[0] + ": " + issue.message + ".";
+            errorMessage = errorMessage + issue.path[0] + ': ' + issue.message + '.';
         });
 
         return {
@@ -49,6 +51,8 @@ export async function createBatch(values: z.infer<typeof batchZodSchema>) {
         startDate: validatedFields.data.startDate,
         status: validatedFields.data.status,
         userId: userId,
+        secondFermentationStart:
+            validatedFields.data.status == PROD_STATUS.SECOND_FERMENTATION ? validatedFields.data.startDate : null,
     };
 
     try {
@@ -59,7 +63,7 @@ export async function createBatch(values: z.infer<typeof batchZodSchema>) {
         };
     }
 
-    revalidatePath("/");
+    revalidatePath('/');
 }
 
 export async function deleteBatch(id: number) {
@@ -70,7 +74,7 @@ export async function deleteBatch(id: number) {
             error: getErrorMessage(err),
         };
     }
-    revalidatePath("/");
+    revalidatePath('/');
 }
 
 export async function updateBatch(batch: Batch) {
@@ -82,14 +86,14 @@ export async function updateBatch(batch: Batch) {
             error: getErrorMessage(err),
         };
     }
-    revalidatePath("/");
+    revalidatePath('/');
 }
 
 export async function addBrewingVessel(values: z.infer<typeof brewingVesselZodSchema>) {
     const { userId } = await auth();
     if (!userId) {
         return {
-            error: "Unauthorized",
+            error: 'Unauthorized',
         };
     }
 
@@ -98,10 +102,10 @@ export async function addBrewingVessel(values: z.infer<typeof brewingVesselZodSc
     });
 
     if (!validatedFields.success) {
-        let errorMessage = "";
+        let errorMessage = '';
 
         validatedFields.error.issues.forEach((issue) => {
-            errorMessage = errorMessage + issue.path[0] + ": " + issue.message + ".";
+            errorMessage = errorMessage + issue.path[0] + ': ' + issue.message + '.';
         });
 
         return {
@@ -122,5 +126,47 @@ export async function addBrewingVessel(values: z.infer<typeof brewingVesselZodSc
         };
     }
 
-    revalidatePath("/");
+    revalidatePath('/');
+}
+
+export async function changeBrewSettings(values: z.infer<typeof brewSettingsZodSchema>) {
+    const { userId } = await auth();
+    if (!userId) {
+        return {
+            error: 'Unauthorized',
+        };
+    }
+
+    const validatedFields = brewSettingsZodSchema.safeParse({
+        firstFermentationDays: values.firstFermentationDays,
+        secondFermentationDays: values.secondFermentationDays,
+    });
+
+    if (!validatedFields.success) {
+        let errorMessage = '';
+
+        validatedFields.error.issues.forEach((issue) => {
+            errorMessage = errorMessage + issue.path[0] + ': ' + issue.message + '.';
+        });
+
+        return {
+            error: errorMessage,
+        };
+    }
+
+    const newBrewSettings: NewBrewSettings = {
+        firstFermentationDays: validatedFields.data.firstFermentationDays,
+        secondFermentationDays: validatedFields.data.secondFermentationDays,
+        userId: userId,
+    };
+
+    try {
+        upsertBrewSettings(newBrewSettings);
+    } catch (err) {
+        return {
+            error: getErrorMessage(err),
+        };
+    }
+
+    revalidatePath('/');
 }
