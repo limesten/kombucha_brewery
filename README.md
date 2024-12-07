@@ -25,4 +25,7 @@
 -   [ ] Display cost savings
 -   [ ] Fix timezone covertion problems
 -   [x] New front page with login
--   [ ] Replace constants with actual user settings
+-   [x] Replace constants with actual user settings
+-   [ ] Crud brew vessels
+-   [ ] Style brew vessel crud
+-   [ ] style settings

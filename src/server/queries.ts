@@ -74,7 +74,7 @@ export async function getBrewingVesselsQuery() {
 
 // Brew settings
 
-export async function getBrewSettings() {
+export async function getBrewSettingsQuery() {
     const { userId } = await auth();
     if (!userId) {
         throw new Error('Unauthorized');
