@@ -67,6 +67,13 @@ export const brewingVesselZodSchema = z.object({
         .trim(),
 });
 
+export const updateBrewingVesselZodSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    id: z.number().int().nonnegative(),
+    userId: z.string(),
+    createdAt: z.date().nullable(),
+});
+
 export const brewSettingsZodSchema = z.object({
     firstFermentationDays: z.preprocess(
         (val) => (typeof val === 'string' ? parseInt(val, 10) : val),

@@ -1,8 +1,7 @@
 import { AddBrewingVessel } from './AddBrewingVessel';
 import { ChangeBrewSettingsDialog } from './ChangeBrewSettingsDialog';
-import { Card, CardContent } from '@/components/ui/card';
-import Image from 'next/image';
 import { getBrewingVesselsQuery, getBrewSettingsQuery } from '@/server/queries';
+import { BrewingVessel } from './BrewingVessel';
 
 export default async function Settings() {
     const brewSettings = await getBrewSettingsQuery();
@@ -13,15 +12,7 @@ export default async function Settings() {
             <h2 className='text-xl font-semibold py-6'>Brewing vessels</h2>
             <div className='w-full flex flex-wrap gap-4 '>
                 {brewingVessels.map((brewingVessel) => (
-                    <div key={brewingVessel.id}>
-                        <Card>
-                            <CardContent className='w-[150px] flex flex-col aspect-square items-center justify-center p-2'>
-                                <Image src='/kombucha.png' alt='brewing vessel' width={50} height={50} />
-                                <span className='text-md font-semibold mt-2'>{brewingVessel.name}</span>
-                            </CardContent>
-                        </Card>
-                        <div></div>
-                    </div>
+                    <BrewingVessel key={brewingVessel.id} brewingVessel={brewingVessel} />
                 ))}
                 <AddBrewingVessel />
             </div>

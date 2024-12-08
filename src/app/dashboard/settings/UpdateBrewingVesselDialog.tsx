@@ -9,27 +9,32 @@ import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
-import { brewingVesselZodSchema } from '@/server/db/schema';
-import { addBrewingVessel } from '@/app/actions';
+import { BrewingVessel, brewingVesselZodSchema } from '@/server/db/schema';
 import { toast } from 'sonner';
+import { deleteBrewingVessel, updateBrewingVessel } from '@/app/actions';
 
-export function AddBrewingVesselDialog({
+export function UpdateBrewingVesselDialog({
+    brewingVessel,
     brewingVesselDialog,
     setBrewingVesselDialog,
 }: {
+    brewingVessel: BrewingVessel;
     brewingVesselDialog: boolean;
     setBrewingVesselDialog: (open: boolean) => void;
 }) {
     const form = useForm<z.infer<typeof brewingVesselZodSchema>>({
         resolver: zodResolver(brewingVesselZodSchema),
         defaultValues: {
-            name: '',
+            name: brewingVessel.name,
+        },
+        values: {
+            name: brewingVessel.name,
         },
     });
 
-    const handleNewBrewingVessel = async (values: z.infer<typeof brewingVesselZodSchema>) => {
+    const handleUpdateBrewingVessel = async (values: z.infer<typeof brewingVesselZodSchema>) => {
         const validatedFields = brewingVesselZodSchema.safeParse({
-            selectedDate: values.name,
+            name: values.name,
         });
         if (!validatedFields.success) {
             let errorMessage = '';
@@ -41,21 +46,29 @@ export function AddBrewingVesselDialog({
             toast(errorMessage);
             return;
         }
-        const result = await addBrewingVessel(validatedFields.data);
+        brewingVessel.name = validatedFields.data.name;
+        const result = await updateBrewingVessel(brewingVessel);
         if (result?.error) {
             toast(result.error);
         }
         setBrewingVesselDialog(false);
     };
 
+    const handleDeleteBrewingVessel = async () => {
+        const result = await deleteBrewingVessel(brewingVessel);
+        if (result?.error) {
+            toast(result.error);
+        }
+    };
+
     return (
         <Dialog open={brewingVesselDialog} onOpenChange={setBrewingVesselDialog}>
             <DialogContent className='sm:max-w-[425px]'>
                 <DialogHeader>
-                    <DialogTitle>Add brewing vessel</DialogTitle>
+                    <DialogTitle>Update brewing vessel</DialogTitle>
                 </DialogHeader>
                 <Form {...form}>
-                    <form onSubmit={form.handleSubmit(handleNewBrewingVessel)}>
+                    <form onSubmit={form.handleSubmit(handleUpdateBrewingVessel)}>
                         <div className='my-4'>
                             <FormField
                                 control={form.control}
@@ -72,7 +85,8 @@ export function AddBrewingVesselDialog({
                             />
                         </div>
                         <DialogFooter>
-                            <Button type='submit'>Add brewing vessel</Button>
+                            <Button onClick={handleDeleteBrewingVessel}>Delete brewing vessel</Button>
+                            <Button type='submit'>Save brewing vessel</Button>
                         </DialogFooter>
                     </form>
                 </Form>

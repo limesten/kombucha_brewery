@@ -47,7 +47,6 @@ export function DatePickerDialog({
             toast(errorMessage);
             return;
         }
-        console.log(`date picker: ${validatedFields.data.selectedDate}`);
         onSelectedDate(validatedFields.data.selectedDate, props.newStatus);
     };
 

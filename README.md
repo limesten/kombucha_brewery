@@ -26,6 +26,6 @@
 -   [ ] Fix timezone covertion problems
 -   [x] New front page with login
 -   [x] Replace constants with actual user settings
--   [ ] Crud brew vessels
--   [ ] Style brew vessel crud
+-   [x] Crud brew vessels
+-   [x] Style brew vessel crud
 -   [ ] style settings

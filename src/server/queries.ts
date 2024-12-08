@@ -1,7 +1,16 @@
 import 'server-only';
 import { db } from './db';
 import { ne, eq, and } from 'drizzle-orm';
-import { batches, Batch, NewBatch, brewingVessels, NewBrewingVessel, brewSettings, NewBrewSettings } from './db/schema';
+import {
+    batches,
+    Batch,
+    NewBatch,
+    brewingVessels,
+    NewBrewingVessel,
+    brewSettings,
+    NewBrewSettings,
+    BrewingVessel,
+} from './db/schema';
 import { auth } from '@clerk/nextjs/server';
 
 // Batch queries
@@ -34,7 +43,6 @@ export async function updateBatchQuery(batch: Batch) {
     if (!userId) {
         throw new Error('Unauthorized');
     }
-    console.log(`queries: ${batch.secondFermentationStart}`);
     await db
         .update(batches)
         .set(batch)
@@ -70,6 +78,14 @@ export async function getBrewingVesselsQuery() {
     });
 
     return rows;
+}
+
+export async function updateBrewingVesselQuery(brewingVessel: BrewingVessel) {
+    await db.update(brewingVessels).set(brewingVessel).where(eq(brewingVessels.id, brewingVessel.id));
+}
+
+export async function deleteBrewingVesselQuery(brewingVessel: BrewingVessel) {
+    await db.delete(brewingVessels).where(eq(brewingVessels.id, brewingVessel.id));
 }
 
 // Brew settings

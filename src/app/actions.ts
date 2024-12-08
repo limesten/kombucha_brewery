@@ -1,6 +1,15 @@
 'use server';
 
-import { Batch, brewSettingsZodSchema, NewBatch, NewBrewingVessel, NewBrewSettings } from '@/server/db/schema';
+import {
+    Batch,
+    BrewingVessel,
+    brewingVessels,
+    brewSettingsZodSchema,
+    NewBatch,
+    NewBrewingVessel,
+    NewBrewSettings,
+    updateBrewingVesselZodSchema,
+} from '@/server/db/schema';
 import { revalidatePath } from 'next/cache';
 import { getErrorMessage } from '@/lib/utils';
 import { batchZodSchema, brewingVesselZodSchema } from '@/server/db/schema';
@@ -14,6 +23,8 @@ import {
     upsertBrewSettings,
     getBrewSettingsQuery,
     getBrewingVesselsQuery,
+    updateBrewingVesselQuery,
+    deleteBrewingVesselQuery,
 } from '@/server/queries';
 import { auth } from '@clerk/nextjs/server';
 import { PROD_STATUS } from '@/constants';
@@ -122,6 +133,58 @@ export async function addBrewingVessel(values: z.infer<typeof brewingVesselZodSc
 
     try {
         await insertBrewingVesselQuery(newBrewingVessel);
+    } catch (err) {
+        return {
+            error: getErrorMessage(err),
+        };
+    }
+
+    revalidatePath('/');
+}
+
+export async function updateBrewingVessel(brewingVessel: BrewingVessel) {
+    const { userId } = await auth();
+    if (!userId) {
+        return {
+            error: 'Unauthorized',
+        };
+    }
+
+    const validatedFields = updateBrewingVesselZodSchema.safeParse(brewingVessel);
+
+    if (!validatedFields.success) {
+        let errorMessage = '';
+
+        validatedFields.error.issues.forEach((issue) => {
+            errorMessage = errorMessage + issue.path[0] + ': ' + issue.message + '.';
+        });
+
+        return {
+            error: errorMessage,
+        };
+    }
+
+    try {
+        await updateBrewingVesselQuery(validatedFields.data);
+    } catch (err) {
+        return {
+            error: getErrorMessage(err),
+        };
+    }
+
+    revalidatePath('/');
+}
+
+export async function deleteBrewingVessel(brewingVessel: BrewingVessel) {
+    const { userId } = await auth();
+    if (!userId) {
+        return {
+            error: 'Unauthorized',
+        };
+    }
+
+    try {
+        await deleteBrewingVesselQuery(brewingVessel);
     } catch (err) {
         return {
             error: getErrorMessage(err),
