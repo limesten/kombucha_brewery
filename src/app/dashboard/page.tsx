@@ -58,7 +58,7 @@ export default async function InProduction() {
                 <p className='mr-4 w-1/5'>Batch</p>
                 <p className='mr-4 w-1/5'>Start</p>
                 <p className='mr-4 w-1/5'>Est. finish</p>
-                <p className='mr-4 w-1/5'>More</p>
+                <p className='w-1/5'>More</p>
             </div>
             {firstStageBatches.map((batch) => (
                 <div key={batch.id}>
@@ -68,7 +68,7 @@ export default async function InProduction() {
                         <p className='mr-4 w-1/5'>{batch.startDate.toISOString().split('T')[0]}</p>
                         <p className='mr-4 w-1/5'>{calcFinishDate(batch, brewSettings).toISOString().split('T')[0]}</p>
 
-                        <div className='mr-4 w-1/5'>
+                        <div className='w-1/5'>
                             <BatchDropdown batch={batch} />
                         </div>
                     </div>
@@ -94,7 +94,7 @@ export default async function InProduction() {
                 <p className='mr-4 w-1/5'>Batch</p>
                 <p className='mr-4 w-1/5'>Start</p>
                 <p className='mr-4 w-1/5'>Est. finish</p>
-                <p className='mr-4 w-1/5'>More</p>
+                <p className='w-1/5'>More</p>
             </div>
             {secondStageBatches.map((batch) => (
                 <div key={batch.id}>
@@ -104,7 +104,7 @@ export default async function InProduction() {
                         <p className='mr-4 w-1/5'>{batch.secondFermentationStart?.toISOString().split('T')[0]}</p>
                         <p className='mr-4 w-1/5'>{calcFinishDate(batch, brewSettings).toISOString().split('T')[0]}</p>
 
-                        <div className='mr-4 w-1/5'>
+                        <div className='w-1/5'>
                             <BatchDropdown batch={batch} />
                         </div>
                     </div>

@@ -114,7 +114,7 @@ export async function getBrewSettingsQuery() {
     throw new Error('Default brew settings not found');
 }
 
-export async function upsertBrewSettings(newBrewSettings: NewBrewSettings) {
+export async function upsertBrewSettingsQuery(newBrewSettings: NewBrewSettings) {
     await db.insert(brewSettings).values(newBrewSettings).onConflictDoUpdate({
         target: brewSettings.userId,
         set: newBrewSettings,

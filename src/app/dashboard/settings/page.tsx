@@ -17,8 +17,9 @@ export default async function Settings() {
                 <AddBrewingVessel />
             </div>
             <h2 className='text-xl font-semibold py-6'>Default brew settings</h2>
-            <p>F1 days: {brewSettings?.firstFermentationDays}</p>
-            <p>F2 days: {brewSettings?.secondFermentationDays}</p>
+            <p>First fermentation: {brewSettings?.firstFermentationDays} days</p>
+            <p>Second fermentation: {brewSettings?.secondFermentationDays} days</p>
+            <p>Email for notifications: {brewSettings?.notificationEmail}</p>
             <ChangeBrewSettingsDialog />
         </>
     );

@@ -22,6 +22,7 @@ export function ChangeBrewSettingsDialog() {
         defaultValues: {
             firstFermentationDays: 7,
             secondFermentationDays: 5,
+            notificationEmail: '',
         },
     });
 
@@ -35,8 +36,8 @@ export function ChangeBrewSettingsDialog() {
 
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-                <Button variant='outline'>Change settings</Button>
+            <DialogTrigger className='my-4' asChild>
+                <Button>Change settings</Button>
             </DialogTrigger>
             <DialogContent className='sm:max-w-[425px]'>
                 <DialogHeader>
@@ -65,6 +66,21 @@ export function ChangeBrewSettingsDialog() {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormLabel>Second fermentation days</FormLabel>
+                                            <FormControl>
+                                                <Input {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                            </div>
+                            <div className='my-4'>
+                                <FormField
+                                    control={form.control}
+                                    name='notificationEmail'
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>Notification email</FormLabel>
                                             <FormControl>
                                                 <Input {...field} />
                                             </FormControl>

@@ -29,7 +29,7 @@ export function AddBrewingVesselDialog({
 
     const handleNewBrewingVessel = async (values: z.infer<typeof brewingVesselZodSchema>) => {
         const validatedFields = brewingVesselZodSchema.safeParse({
-            selectedDate: values.name,
+            name: values.name,
         });
         if (!validatedFields.success) {
             let errorMessage = '';

@@ -3,7 +3,6 @@
 import {
     Batch,
     BrewingVessel,
-    brewingVessels,
     brewSettingsZodSchema,
     NewBatch,
     NewBrewingVessel,
@@ -20,13 +19,11 @@ import {
     updateBatchQuery,
     insertBrewingVesselQuery,
     getHighestBatchNumberQuery,
-    upsertBrewSettings,
-    getBrewSettingsQuery,
-    getBrewingVesselsQuery,
+    upsertBrewSettingsQuery,
     updateBrewingVesselQuery,
     deleteBrewingVesselQuery,
 } from '@/server/queries';
-import { auth } from '@clerk/nextjs/server';
+import { auth, EmailAddress } from '@clerk/nextjs/server';
 import { PROD_STATUS } from '@/constants';
 
 export async function createBatch(values: z.infer<typeof batchZodSchema>) {
@@ -139,7 +136,7 @@ export async function addBrewingVessel(values: z.infer<typeof brewingVesselZodSc
         };
     }
 
-    revalidatePath('/');
+    revalidatePath('/dashboard/settings');
 }
 
 export async function updateBrewingVessel(brewingVessel: BrewingVessel) {
@@ -172,7 +169,7 @@ export async function updateBrewingVessel(brewingVessel: BrewingVessel) {
         };
     }
 
-    revalidatePath('/');
+    revalidatePath('/dashboard/settings');
 }
 
 export async function deleteBrewingVessel(brewingVessel: BrewingVessel) {
@@ -191,7 +188,7 @@ export async function deleteBrewingVessel(brewingVessel: BrewingVessel) {
         };
     }
 
-    revalidatePath('/');
+    revalidatePath('/dashboard/settings');
 }
 
 export async function changeBrewSettings(values: z.infer<typeof brewSettingsZodSchema>) {
@@ -205,6 +202,7 @@ export async function changeBrewSettings(values: z.infer<typeof brewSettingsZodS
     const validatedFields = brewSettingsZodSchema.safeParse({
         firstFermentationDays: values.firstFermentationDays,
         secondFermentationDays: values.secondFermentationDays,
+        notificationEmail: values.notificationEmail,
     });
 
     if (!validatedFields.success) {
@@ -222,16 +220,17 @@ export async function changeBrewSettings(values: z.infer<typeof brewSettingsZodS
     const newBrewSettings: NewBrewSettings = {
         firstFermentationDays: validatedFields.data.firstFermentationDays,
         secondFermentationDays: validatedFields.data.secondFermentationDays,
+        notificationEmail: validatedFields.data.notificationEmail,
         userId: userId,
     };
 
     try {
-        upsertBrewSettings(newBrewSettings);
+        upsertBrewSettingsQuery(newBrewSettings);
     } catch (err) {
         return {
             error: getErrorMessage(err),
         };
     }
 
-    revalidatePath('/');
+    revalidatePath('/dashboard/settings');
 }
