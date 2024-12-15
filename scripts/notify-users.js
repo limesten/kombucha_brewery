@@ -1,6 +1,7 @@
 const { Pool } = require('pg');
-require('dotenv').config({ path: '../.env' });
 const nodemailer = require('nodemailer');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 const calcFinishDate = (batch, settings) => {
     let expectedBrewingDays;
@@ -51,7 +52,6 @@ const calcFinishDate = (batch, settings) => {
         `;
 
         const activeBatches = await client.query(sql);
-        console.log(activeBatches.rows);
         const userSettings = {};
 
         for (const batch of activeBatches.rows) {
