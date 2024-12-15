@@ -1,18 +1,13 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import { TopNav } from "./TopNav";
-import {
-    ClerkProvider,
-    SignInButton,
-    SignedIn,
-    SignedOut,
-    UserButton,
-} from "@clerk/nextjs";
+import type { Metadata } from 'next';
+import './globals.css';
+import { Toaster } from '@/components/ui/sonner';
+import { TopNav } from './TopNav';
+import { TopBanner } from './TopBanner';
+import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 export const metadata: Metadata = {
-    title: "Kombucha Brewery",
-    description: "Master your craft",
+    title: 'Kombucha Brewery',
+    description: 'Master your craft',
 };
 
 export default function RootLayout({
@@ -22,14 +17,15 @@ export default function RootLayout({
 }>) {
     return (
         <ClerkProvider>
-            <html lang="en">
+            <html lang='en'>
                 <body>
-                    <div className="container mx-auto max-w-[800px]">
+                    <TopBanner />
+                    <div className='container mx-auto max-w-[800px]'>
                         <SignedIn>
                             <TopNav />
                         </SignedIn>
                         {children}
-                        <Toaster position="top-right" />
+                        <Toaster position='top-right' />
                     </div>
                 </body>
             </html>

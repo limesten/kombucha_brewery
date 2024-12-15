@@ -37,7 +37,7 @@ export function ChangeBrewSettingsDialog() {
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger className='my-4' asChild>
-                <Button>Change settings</Button>
+                <Button variant='japandi'>Change settings</Button>
             </DialogTrigger>
             <DialogContent className='sm:max-w-[425px]'>
                 <DialogHeader>

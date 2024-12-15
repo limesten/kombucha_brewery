@@ -42,9 +42,11 @@ export function CreateBatchDialog({ brewingVessels }: { brewingVessels: BrewingV
     return (
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-                <Button>Create Batch</Button>
+                <Button variant='japandi' size='xl'>
+                    Create Batch
+                </Button>
             </DialogTrigger>
-            <DialogContent className='sm:max-w-[425px]'>
+            <DialogContent className='sm:max-w-[425px] bg-primary-bg text-secondary-gray'>
                 <DialogHeader>
                     <DialogTitle>Create batch</DialogTitle>
                 </DialogHeader>
@@ -63,7 +65,7 @@ export function CreateBatchDialog({ brewingVessels }: { brewingVessels: BrewingV
                                                     <SelectValue placeholder='Select current status' />
                                                 </SelectTrigger>
                                             </FormControl>
-                                            <SelectContent>
+                                            <SelectContent className='bg-primary-bg'>
                                                 {brewingVessels &&
                                                     brewingVessels.map((brewingVessel) => (
                                                         <SelectItem value={brewingVessel.name} key={brewingVessel.id}>
@@ -90,7 +92,7 @@ export function CreateBatchDialog({ brewingVessels }: { brewingVessels: BrewingV
                                                     <SelectValue placeholder='Select current status' />
                                                 </SelectTrigger>
                                             </FormControl>
-                                            <SelectContent>
+                                            <SelectContent className='bg-primary-bg'>
                                                 <SelectItem value='First fermentation'>First fermentation</SelectItem>
                                                 <SelectItem value='Second fermentation'>Second fermentation</SelectItem>
                                             </SelectContent>
@@ -114,7 +116,7 @@ export function CreateBatchDialog({ brewingVessels }: { brewingVessels: BrewingV
                                                     <Button
                                                         variant={'outline'}
                                                         className={cn(
-                                                            'w-[240px] pl-3 text-left font-normal',
+                                                            'w-[240px] pl-3 text-left font-normal bg-primary-bg',
                                                             !field.value && 'text-muted-foreground'
                                                         )}
                                                     >
@@ -127,7 +129,7 @@ export function CreateBatchDialog({ brewingVessels }: { brewingVessels: BrewingV
                                                     </Button>
                                                 </FormControl>
                                             </PopoverTrigger>
-                                            <PopoverContent className='w-auto p-0' align='start'>
+                                            <PopoverContent className='w-auto p-0 bg-primary-bg' align='start'>
                                                 <Calendar
                                                     mode='single'
                                                     selected={field.value}
@@ -142,7 +144,9 @@ export function CreateBatchDialog({ brewingVessels }: { brewingVessels: BrewingV
                             />
                         </div>
                         <DialogFooter>
-                            <Button type='submit'>Create batch</Button>
+                            <Button type='submit' variant='japandi'>
+                                Create batch
+                            </Button>
                         </DialogFooter>
                     </form>
                 </Form>

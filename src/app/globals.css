@@ -1,24 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-    --creamy-white: #f3f0e8;
-    --soft-stone: #e6e4e0;
-    --sage-green: #b9b99d;
-    --blush-sand: #e0cfc3;
-    --warm-taupe: #dfcaba;
-    --golden-straw: #dcb482;
-    --earthy-clay: #c09e85;
-    --smoky-grey: #8f837a;
-    --slate-grey: #858480;
-    --moss-green: #b0b9a8;
-    --forest-night: #606c5a;
-    --charcoal-grey: #5e5e5e;
+@font-face {
+    font-family: 'playlist-script';
+    src: url('/fonts/playlist-script.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
 }
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Montserrat', sans-serif;
+}
+
+:root {
+    --primary-bg: #f3f1ea;
+    --accent-green: #afb9a8;
+    --accent-darkgreen: #606c5a;
+    --accent-clay: #c09e85;
+    --secondary-gray: #4f4f4f;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--primary-bg);
 }
 
 @layer base {

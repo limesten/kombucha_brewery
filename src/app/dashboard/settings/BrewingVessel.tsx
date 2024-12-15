@@ -11,9 +11,9 @@ export function BrewingVessel({ brewingVessel }: { brewingVessel: BrewingVessel 
     return (
         <div>
             <Card onClick={() => setBrewingVesselDialog(true)}>
-                <CardContent className='w-[150px] flex flex-col aspect-square items-center justify-center p-2 hover:bg-slate-100 hover:cursor-pointer'>
+                <CardContent className='w-[150px] flex flex-col aspect-square items-center justify-center p-2 hover:cursor-pointer'>
                     <Image src='/kombucha.png' alt='brewing vessel' width={50} height={50} />
-                    <span className='text-md font-semibold mt-2'>{brewingVessel.name}</span>
+                    <span className='text-sm font-semibold mt-2'>{brewingVessel.name}</span>
                 </CardContent>
             </Card>
             <UpdateBrewingVesselDialog

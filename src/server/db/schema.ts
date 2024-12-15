@@ -90,7 +90,7 @@ export const brewSettingsZodSchema = z.object({
             .min(1, { message: 'Second fermentation must be at least 1 day' })
             .max(10, { message: 'Second fermentation must not be more than 10 days' })
     ),
-    notificationEmail: z.string().email(),
+    notificationEmail: z.string().email().or(z.literal('')),
 });
 
 export type Batch = InferSelectModel<typeof batches>;

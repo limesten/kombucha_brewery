@@ -72,7 +72,9 @@ export function AddBrewingVesselDialog({
                             />
                         </div>
                         <DialogFooter>
-                            <Button type='submit'>Add brewing vessel</Button>
+                            <Button type='submit' variant='japandi'>
+                                Add brewing vessel
+                            </Button>
                         </DialogFooter>
                     </form>
                 </Form>

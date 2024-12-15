@@ -1,4 +1,4 @@
-import { getBatchesByStatusQuery } from "@/server/queries";
+import { getBatchesByStatusQuery } from '@/server/queries';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -6,58 +6,69 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { deleteBatch } from "@/app/actions";
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import { deleteBatch } from '@/app/actions';
 
 export default async function Page() {
-    const batches = await getBatchesByStatusQuery("Finished");
+    const batches = await getBatchesByStatusQuery('Finished');
 
     return (
         <>
-            <div className="text-xl flex my-4">
-                <p className="mr-4 w-1/5">Brewing vessel</p>
-                <p className="mr-4 w-1/5">Batch</p>
-                <p className="mr-4 w-1/5">Started</p>
-                <p className="mr-4 w-1/5">Finished</p>
-                <p className="mr-4 w-1/5">More</p>
-            </div>
-            {batches.map((batch) => (
-                <div key={batch.id}>
-                    <div className="text-xl flex my-4">
-                        <p className="mr-4 w-1/5">{batch.brewingVessel}</p>
-                        <p className="mr-4 w-1/5">{batch.batchNumber}</p>
-                        <p className="mr-4 w-1/5">
-                            {batch.startDate.toISOString().split("T")[0]}
-                        </p>
-                        <p className="mr-4 w-1/5">
-                            {batch.finishDate?.toISOString().split("T")[0]}
-                        </p>
-                        <div className="mr-4 w-1/5">
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline">...</Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                    <DropdownMenuLabel>Batch Actions</DropdownMenuLabel>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem>
-                                        <form
-                                            action={async () => {
-                                                "use server";
-                                                await deleteBatch(batch.id);
-                                            }}
-                                        >
-                                            <button>Delete batch</button>
-                                        </form>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        </div>
-                    </div>
-                    <hr className="my-4 border-t border-gray-400" />
-                </div>
-            ))}
+            <table className='min-w-full text-xl my-4'>
+                <thead>
+                    <tr className='text-secondary-gray bg-accent-green'>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Container</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Batch</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Started</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Finished</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>More</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {batches.length === 0 ? (
+                        <tr>
+                            <td colSpan={6} className='text-center py-4 text-secondary-gray'>
+                                Nothing here at the moment...
+                            </td>
+                        </tr>
+                    ) : (
+                        batches.map((batch) => (
+                            <tr key={batch.id} className='text-secondary-gray'>
+                                <td className='px-4 py-2 border border-accent-darkgreen'>{batch.brewingVessel}</td>
+                                <td className='px-4 py-2 border border-accent-darkgreen'>{batch.batchNumber}</td>
+                                <td className='px-4 py-2 border border-accent-darkgreen'>
+                                    {batch.startDate.toISOString().split('T')[0]}
+                                </td>
+                                <td className='px-4 py-2 border border-accent-darkgreen'>
+                                    {batch.finishDate?.toISOString().split('T')[0]}
+                                </td>
+                                <td className='px-4 py-2 border border-accent-darkgreen text-center'>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant='japandi'>...</Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent className='bg-primary-bg'>
+                                            <DropdownMenuLabel>Batch Actions</DropdownMenuLabel>
+                                            <DropdownMenuSeparator />
+                                            <DropdownMenuItem>
+                                                <form
+                                                    action={async () => {
+                                                        'use server';
+                                                        await deleteBatch(batch.id);
+                                                    }}
+                                                >
+                                                    <button>Delete batch</button>
+                                                </form>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
         </>
     );
 }

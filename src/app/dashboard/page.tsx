@@ -38,7 +38,7 @@ const calcProgress = (batch: Batch, settings: BrewSettings) => {
     const elapsedTime = currentDate.getTime() - batch.startDate.getTime();
 
     let progress = (elapsedTime / totalTime) * 100;
-    progress = Math.min(Math.max(progress, 0));
+    progress = Math.floor(Math.min(Math.max(progress, 0)));
 
     return progress;
 };
@@ -52,75 +52,83 @@ export default async function InProduction() {
 
     return (
         <>
-            <h2 className='text-xl mt-4 mb-6 font-semibold'>First fermentation</h2>
-            <div className='text-xl flex my-4'>
-                <p className='mr-4 w-1/5'>Brewing vessel</p>
-                <p className='mr-4 w-1/5'>Batch</p>
-                <p className='mr-4 w-1/5'>Start</p>
-                <p className='mr-4 w-1/5'>Est. finish</p>
-                <p className='w-1/5'>More</p>
-            </div>
-            {firstStageBatches.map((batch) => (
-                <div key={batch.id}>
-                    <div className='text-xl flex my-4'>
-                        <p className='mr-4 w-1/5'>{batch.brewingVessel}</p>
-                        <p className='mr-4 w-1/5'>{batch.batchNumber}</p>
-                        <p className='mr-4 w-1/5'>{batch.startDate.toISOString().split('T')[0]}</p>
-                        <p className='mr-4 w-1/5'>{calcFinishDate(batch, brewSettings).toISOString().split('T')[0]}</p>
-
-                        <div className='w-1/5'>
-                            <BatchDropdown batch={batch} />
-                        </div>
-                    </div>
-                    <div className='my-6'>
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Progress value={calcProgress(batch, brewSettings)} />
-                                </TooltipTrigger>
-                                <TooltipContent>Estimated {calcDaysLeft(batch, brewSettings)} days left</TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    </div>
-                    <hr className='my-4 border-t border-gray-400' />
-                </div>
-            ))}
+            <h2 className='text-xl text-secondary-gray mt-4 mb-6 font-semibold'>First fermentation</h2>
+            <table className='min-w-full text-xl my-4'>
+                <thead>
+                    <tr className='text-secondary-gray bg-accent-green'>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Container</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Batch</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Start</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Est. finish</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Progress</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>More</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {firstStageBatches.map((batch) => (
+                        <tr key={batch.id} className='text-secondary-gray'>
+                            <td className='px-4 py-2 border border-accent-darkgreen'>{batch.brewingVessel}</td>
+                            <td className='px-4 py-2 border border-accent-darkgreen'>{batch.batchNumber}</td>
+                            <td className='px-4 py-2 border border-accent-darkgreen'>
+                                {batch.startDate.toISOString().split('T')[0]}
+                            </td>
+                            <td className='px-4 py-2 border border-accent-darkgreen'>
+                                {calcFinishDate(batch, brewSettings).toISOString().split('T')[0]}
+                            </td>
+                            <td className='px-4 py-2 border border-accent-darkgreen'>
+                                {calcProgress(batch, brewSettings)}%
+                            </td>
+                            <td className='px-4 py-2 border border-accent-darkgreen text-center'>
+                                <BatchDropdown batch={batch} />
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
             <div className='w-full flex justify-center py-4'>
                 <CreateBatchDialog brewingVessels={brewingVessels} />
             </div>
-            <h2 className='text-xl mt-4 mb-6 font-semibold'>Second fermentation</h2>
-            <div className='text-xl flex my-4'>
-                <p className='mr-4 w-1/5'>Brewing vessel</p>
-                <p className='mr-4 w-1/5'>Batch</p>
-                <p className='mr-4 w-1/5'>Start</p>
-                <p className='mr-4 w-1/5'>Est. finish</p>
-                <p className='w-1/5'>More</p>
-            </div>
-            {secondStageBatches.map((batch) => (
-                <div key={batch.id}>
-                    <div className='text-xl flex my-4'>
-                        <p className='mr-4 w-1/5'>{batch.brewingVessel}</p>
-                        <p className='mr-4 w-1/5'>{batch.batchNumber}</p>
-                        <p className='mr-4 w-1/5'>{batch.secondFermentationStart?.toISOString().split('T')[0]}</p>
-                        <p className='mr-4 w-1/5'>{calcFinishDate(batch, brewSettings).toISOString().split('T')[0]}</p>
-
-                        <div className='w-1/5'>
-                            <BatchDropdown batch={batch} />
-                        </div>
-                    </div>
-                    <div className='my-6'>
-                        <TooltipProvider>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Progress value={calcProgress(batch, brewSettings)} />
-                                </TooltipTrigger>
-                                <TooltipContent>Estimated {calcDaysLeft(batch, brewSettings)} days left</TooltipContent>
-                            </Tooltip>
-                        </TooltipProvider>
-                    </div>
-                    <hr className='my-4 border-t border-gray-400' />
-                </div>
-            ))}
+            <h2 className='text-xl text-secondary-gray mt-4 mb-6 font-semibold'>Second fermentation</h2>
+            <table className='min-w-full text-xl my-4'>
+                <thead>
+                    <tr className='text-secondary-gray bg-accent-green'>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Container</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Batch</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Start</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Est. finish</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>Progress</th>
+                        <th className='px-4 py-2 text-left border border-accent-darkgreen'>More</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {secondStageBatches.length === 0 ? (
+                        <tr>
+                            <td colSpan={6} className='text-center py-4 text-secondary-gray'>
+                                Nothing here at the moment...
+                            </td>
+                        </tr>
+                    ) : (
+                        secondStageBatches.map((batch) => (
+                            <tr key={batch.id} className='text-secondary-gray'>
+                                <td className='px-4 py-2 border border-accent-darkgreen'>{batch.brewingVessel}</td>
+                                <td className='px-4 py-2 border border-accent-darkgreen'>{batch.batchNumber}</td>
+                                <td className='px-4 py-2 border border-accent-darkgreen'>
+                                    {batch.startDate.toISOString().split('T')[0]}
+                                </td>
+                                <td className='px-4 py-2 border border-accent-darkgreen'>
+                                    {calcFinishDate(batch, brewSettings).toISOString().split('T')[0]}
+                                </td>
+                                <td className='px-4 py-2 border border-accent-darkgreen'>
+                                    {calcProgress(batch, brewSettings)}%
+                                </td>
+                                <td className='px-4 py-2 border border-accent-darkgreen text-center'>
+                                    <BatchDropdown batch={batch} />
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
         </>
     );
 }

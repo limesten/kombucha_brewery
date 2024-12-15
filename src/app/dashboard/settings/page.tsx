@@ -9,17 +9,20 @@ export default async function Settings() {
 
     return (
         <>
-            <h2 className='text-xl font-semibold py-6'>Brewing vessels</h2>
+            <h2 className='text-xl font-semibold py-6 text-secondary-gray'>Brewing vessels</h2>
             <div className='w-full flex flex-wrap gap-4 '>
                 {brewingVessels.map((brewingVessel) => (
                     <BrewingVessel key={brewingVessel.id} brewingVessel={brewingVessel} />
                 ))}
                 <AddBrewingVessel />
             </div>
-            <h2 className='text-xl font-semibold py-6'>Default brew settings</h2>
+            <h2 className='text-xl text-secondary-gray font-semibold py-6'>Default brew settings</h2>
             <p>First fermentation: {brewSettings?.firstFermentationDays} days</p>
             <p>Second fermentation: {brewSettings?.secondFermentationDays} days</p>
-            <p>Email for notifications: {brewSettings?.notificationEmail}</p>
+            <p>
+                Email for notifications:
+                {brewSettings?.notificationEmail ? brewSettings.notificationEmail : ' No email added'}
+            </p>
             <ChangeBrewSettingsDialog />
         </>
     );

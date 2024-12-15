@@ -85,8 +85,12 @@ export function UpdateBrewingVesselDialog({
                             />
                         </div>
                         <DialogFooter>
-                            <Button onClick={handleDeleteBrewingVessel}>Delete brewing vessel</Button>
-                            <Button type='submit'>Save brewing vessel</Button>
+                            <Button onClick={handleDeleteBrewingVessel} variant='japandi'>
+                                Delete brewing vessel
+                            </Button>
+                            <Button type='submit' variant='japandi'>
+                                Save brewing vessel
+                            </Button>
                         </DialogFooter>
                     </form>
                 </Form>

@@ -15,7 +15,7 @@
 -   [x] Finish date
 -   [x] Progress bar
 -   [x] Authentification /w clerk
--   [ ] Email notifications with nodemailer
+-   [x] Email notifications with nodemailer
 -   [x] Dropdown for delete batch / mark as done
 -   [x] Choose batch status during creation
 -   [x] Split into first/second fermentation
@@ -28,4 +28,4 @@
 -   [x] Replace constants with actual user settings
 -   [x] Crud brew vessels
 -   [x] Style brew vessel crud
--   [ ] style settings
+-   [x] style settings

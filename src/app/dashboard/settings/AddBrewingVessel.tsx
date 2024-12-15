@@ -8,8 +8,8 @@ export function AddBrewingVessel() {
     return (
         <>
             <Card onClick={() => setBrewingVesselDialog(true)}>
-                <CardContent className='w-[150px] flex aspect-square items-center justify-center p-2 hover:bg-slate-100 hover:cursor-pointer'>
-                    <span className='text-md font-semibold'>Add new</span>
+                <CardContent className='w-[150px] flex aspect-square items-center justify-center p-2 hover:cursor-pointer'>
+                    <span className='text-sm font-semibold text-secondary-gray'>Add new</span>
                 </CardContent>
             </Card>
             <AddBrewingVesselDialog
