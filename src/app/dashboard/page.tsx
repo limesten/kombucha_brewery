@@ -1,7 +1,6 @@
 import { getBatchesByStatusQuery, getBrewingVesselsQuery, getBrewSettingsQuery } from '@/server/queries';
 import { CreateBatchDialog } from './CreateBatchDialog';
 import { BatchDropdown } from './BatchDropdown';
-import { Progress } from '@/components/ui/progress';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { PROD_STATUS } from '@/constants';
 import { Batch, BrewSettings } from '@/server/db/schema';
@@ -76,7 +75,16 @@ export default async function InProduction() {
                                 {calcFinishDate(batch, brewSettings).toISOString().split('T')[0]}
                             </td>
                             <td className='px-4 py-2 border border-accent-darkgreen'>
-                                {calcProgress(batch, brewSettings)}%
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <span>{calcProgress(batch, brewSettings)}%</span>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            Estimated {calcDaysLeft(batch, brewSettings)} days left
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
                             </td>
                             <td className='px-4 py-2 border border-accent-darkgreen text-center'>
                                 <BatchDropdown batch={batch} />

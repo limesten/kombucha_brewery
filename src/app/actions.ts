@@ -23,7 +23,7 @@ import {
     updateBrewingVesselQuery,
     deleteBrewingVesselQuery,
 } from '@/server/queries';
-import { auth, EmailAddress } from '@clerk/nextjs/server';
+import { auth } from '@clerk/nextjs/server';
 import { PROD_STATUS } from '@/constants';
 
 export async function createBatch(values: z.infer<typeof batchZodSchema>) {
