@@ -21,7 +21,7 @@ export default async function Settings() {
             <p>Second fermentation: {brewSettings?.secondFermentationDays} days</p>
             <p>
                 Email for notifications:
-                {brewSettings?.notificationEmail ? brewSettings.notificationEmail : ' No email added'}
+                {brewSettings?.notificationEmail ? ` ${brewSettings.notificationEmail}` : ' No email added'}
             </p>
             <ChangeBrewSettingsDialog />
         </>

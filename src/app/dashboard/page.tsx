@@ -33,11 +33,14 @@ const calcDaysLeft = (batch: Batch, settings: BrewSettings) => {
 const calcProgress = (batch: Batch, settings: BrewSettings) => {
     const estimatedFinishDate = calcFinishDate(batch, settings);
     const currentDate = new Date();
-    const totalTime = estimatedFinishDate.getTime() - batch.startDate.getTime();
-    const elapsedTime = currentDate.getTime() - batch.startDate.getTime();
+    const startDate = batch.status === PROD_STATUS.SECOND_FERMENTATION 
+        ? batch.secondFermentationStart! 
+        : batch.startDate;
+    const totalTime = estimatedFinishDate.getTime() - startDate.getTime();
+    const elapsedTime = currentDate.getTime() - startDate.getTime();
 
     let progress = (elapsedTime / totalTime) * 100;
-    progress = Math.floor(Math.min(Math.max(progress, 0)));
+    progress = Math.floor(Math.min(Math.max(progress, 0), 100));
 
     return progress;
 };
