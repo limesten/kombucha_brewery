@@ -81,6 +81,8 @@ const calcFinishDate = (batch, settings) => {
 
             const finishDate = calcFinishDate(batch, settings);
             const finishDateStr = finishDate.toISOString().split('T')[0];
+            console.log(`Batch ${batch.id} (${batch.brewing_vessel}): Expected finish date: ${finishDateStr}, Today: ${today}, Status: ${batch.status}`);
+            
             if (finishDateStr == today) {
                 console.log(`will send reminder for batch ${batch.id}`);
                 const mailOptions = {
@@ -96,6 +98,8 @@ const calcFinishDate = (batch, settings) => {
                 } catch (error) {
                     console.error('Error sending email:', error);
                 }
+            } else {
+                console.log(`no reminder for batch ${batch.id}`);
             }
         }
 
